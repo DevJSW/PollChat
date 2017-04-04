@@ -1,5 +1,6 @@
 package com.pollchat.pollchat;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class SignupActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private Menu menu;
     private FirebaseAuth auth;
+    private ProgressDialog mprogress;
     private StorageReference mStorage;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
@@ -60,6 +62,8 @@ public class SignupActivity extends AppCompatActivity {
                 startActivityForResult(galleryIntent, GALLERY_REQUEST);
             }
         });
+
+        mprogress = new ProgressDialog(this);
 
         inputName = (EditText) findViewById(R.id.name);
         inputEmail = (EditText) findViewById(R.id.email);
@@ -107,7 +111,7 @@ public class SignupActivity extends AppCompatActivity {
             default:
                 if (id == R.id.action_next) {
 
-                        String name = inputName.getText().toString().trim();
+                        final String name = inputName.getText().toString().trim();
                         String email = inputEmail.getText().toString().trim();
                         String password = inputPassword.getText().toString().trim();
 
@@ -159,6 +163,9 @@ public class SignupActivity extends AppCompatActivity {
                                                     Toast.LENGTH_LONG).show();
                                         } else {
 
+                                            mprogress.setMessage("Saving, please wait...");
+                                            mprogress.show();
+
                                             StorageReference filepath = mStorage.child("Profile_images").child(mImageUri.getLastPathSegment());
 
 
@@ -168,12 +175,12 @@ public class SignupActivity extends AppCompatActivity {
 
                                                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                                                    final DatabaseReference newPost = mDatabaseUsers.push();
+                                                    final DatabaseReference newPost = mDatabaseUsers;
 
-                                                    newPost.child("name").setValue(inputName);
-                                                    newPost.child("image").setValue(downloadUrl.toString());
-                                                    newPost.child("date").setValue(stringDate);
-                                                    newPost.child("uid").setValue(user_id);
+                                                    newPost.child(user_id).child("name").setValue(name);
+                                                    newPost.child(user_id).child("image").setValue(downloadUrl.toString());
+                                                    newPost.child(user_id).child("date").setValue(stringDate);
+                                                    newPost.child(user_id).child("uid").setValue(user_id);
 
                                                     Intent cardonClick = new Intent(SignupActivity.this, MainActivity.class);
                                                     cardonClick.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -181,7 +188,7 @@ public class SignupActivity extends AppCompatActivity {
 
                                                 }
                                             });
-                                            
+
                                         }
                                     }
                                 });

@@ -46,10 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-        //if (auth.getCurrentUser() != null) {
-        //    startActivity(new Intent(LoginActivity.this, EditActivity.class));
-        //    finish();
-       // }
+        if (auth.getCurrentUser() != null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
 
         // set the view now
         setContentView(R.layout.activity_login);
