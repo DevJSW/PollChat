@@ -46,10 +46,10 @@ public class LoginActivity extends AppCompatActivity {
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
 
-       // if (auth.getCurrentUser() != null) {
-      //      startActivity(new Intent(LoginActivity.this, MainActivity.class));
-      //      finish();
-     //   }
+        //if (auth.getCurrentUser() != null) {
+        //    startActivity(new Intent(LoginActivity.this, EditActivity.class));
+        //    finish();
+       // }
 
         // set the view now
         setContentView(R.layout.activity_login);
@@ -58,7 +58,11 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // change google btn color
+                mGoogleBtn.setImageResource(R.drawable.google_btn_img_on);
                 signIn();
+                mGoogleBtn.setImageResource(R.drawable.google_btn_img);
             }
         });
 

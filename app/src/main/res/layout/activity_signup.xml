@@ -21,7 +21,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:id="@+id/topImg"
+            android:id="@+id/userImgBtn"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/placeholder_image"
             android:layout_marginBottom="20dp"

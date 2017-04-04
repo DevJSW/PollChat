@@ -1,18 +1,64 @@
 package com.pollchat.pollchat;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 public class EditActivity extends AppCompatActivity {
     private Menu menu;
+    private ImageView mPostUserimg;
+    private EditText mPostName;
+    private DatabaseReference mDatabaseUsers;
+    private StorageReference mStorage;
+    private Uri mImageUri = null;
+    private FirebaseAuth auth;
+    private ProgressDialog mprogress;
+    private static final int GALLERY_REQUEST =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+
+        mprogress = new ProgressDialog(this);
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mStorage = FirebaseStorage.getInstance().getReference().child("Profile_Images");
+        auth = FirebaseAuth.getInstance();
+
+        mPostName = (EditText) findViewById(R.id.post_name);
+
+        // set user img when clicked by user from gallery
+        mPostUserimg = (ImageView) findViewById(R.id.post_userimg);
+        mPostUserimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent();
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, GALLERY_REQUEST);
+            }
+        });
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -21,6 +67,18 @@ public class EditActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.menu = menu;
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+
+            mImageUri = data.getData();
+            mPostUserimg.setImageURI(mImageUri);
+
+        }
     }
 
 
@@ -36,8 +94,57 @@ public class EditActivity extends AppCompatActivity {
                 return true;
             default:
                 if (id == R.id.action_save) {
-                    Intent cardonClick = new Intent(EditActivity.this, MainActivity.class);
-                    startActivity(cardonClick);
+
+
+                    final String name_val = mPostName.getText().toString().trim();
+
+                    Date date = new Date();
+                    final String stringDate = DateFormat.getDateInstance().format(date);
+
+                    final String user_id = auth.getCurrentUser().getUid();
+
+                    if (mImageUri == null) {
+                        Toast.makeText(getApplicationContext(), "Add profile image!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (mPostName == null) {
+                        Toast.makeText(getApplicationContext(), "Enter Name!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (mImageUri != null) {
+
+                        mprogress.setMessage("Saving ...");
+                        mprogress.show();
+
+                        StorageReference filepath = mStorage.child("Profile_images").child(mImageUri.getLastPathSegment());
+
+
+                        filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                final DatabaseReference newPost = mDatabaseUsers.push();
+
+                                newPost.child("name").setValue(name_val);
+                                newPost.child("image").setValue(downloadUrl.toString());
+                                newPost.child("date").setValue(stringDate);
+                                newPost.child("uid").setValue(user_id);
+
+                                mprogress.dismiss();
+
+                                Intent cardonClick = new Intent(EditActivity.this, MainActivity.class);
+                                cardonClick.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(cardonClick);
+
+                            }
+                        });
+
+
+                    }
+
+
 
                 }
                 return super.onOptionsItemSelected(item);
