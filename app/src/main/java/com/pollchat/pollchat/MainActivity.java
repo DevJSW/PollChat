@@ -181,10 +181,10 @@ public class MainActivity extends AppCompatActivity
 
                     mProgressBar.setVisibility(View.GONE);
 
-                  //  Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                   // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                  //  startActivity(intent);
-                 //   finish();
+                    Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
 
                 }else {
 

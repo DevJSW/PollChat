@@ -125,12 +125,12 @@ public class EditActivity extends AppCompatActivity {
 
                                 final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                                final DatabaseReference newPost = mDatabaseUsers.push();
+                                final DatabaseReference newPost = mDatabaseUsers;
 
-                                newPost.child("name").setValue(name_val);
-                                newPost.child("image").setValue(downloadUrl.toString());
-                                newPost.child("date").setValue(stringDate);
-                                newPost.child("uid").setValue(user_id);
+                                newPost.child(user_id).child("name").setValue(name_val);
+                                newPost.child(user_id).child("image").setValue(downloadUrl.toString());
+                                newPost.child(user_id).child("date").setValue(stringDate);
+                                newPost.child(user_id).child("uid").setValue(user_id);
 
                                 mprogress.dismiss();
 
