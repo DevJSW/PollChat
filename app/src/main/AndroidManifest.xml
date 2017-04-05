@@ -34,7 +34,8 @@
         <activity
             android:name=".EditActivity"
             android:label="Edit" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".CreatepollchatActivity"></activity>
     </application>
 
 </manifest>
