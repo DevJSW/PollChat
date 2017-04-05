@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-               // Intent cardonClick = new Intent(MainActivity.this, PostActivity.class);
-                //startActivity(cardonClick);
+                Intent cardonClick = new Intent(MainActivity.this, CreatepollchatActivity.class);
+                startActivity(cardonClick);
 
             }
         });

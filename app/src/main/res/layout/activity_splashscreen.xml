@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     android:id="@+id/lin_lay"
     tools:context="com.pollchat.pollchat.Splashscreen">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/splash"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
