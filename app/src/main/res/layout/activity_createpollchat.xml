@@ -95,33 +95,14 @@
 
             </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Votes: 0"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="3dp"
-                    android:textSize="14dp"
-                    android:id="@+id/first_row_vote_txt"
-                    android:textStyle="italic"
-                    android:layout_toRightOf="@+id/input_first_row_userimg"
-                    android:layout_below="@+id/name_lay"/>
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="15dp"
-                    android:id="@+id/first_row_voteBtn"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_vote_blue"/>
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="70dp"
                 android:layout_marginRight="20dp"
                 android:background="#716f6f"/>
@@ -177,33 +158,13 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Votes: 0"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="3dp"
-                    android:textSize="14dp"
-                    android:id="@+id/second_row_vote_txt"
-                    android:textStyle="italic"
-                    android:layout_toRightOf="@+id/input_second_row_userimg"
-                    android:layout_below="@+id/name2_lay"/>
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/second_row_voteBtn"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_vote_blue"/>
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="70dp"
                 android:layout_marginRight="20dp"
                 android:background="#716f6f"/>
@@ -265,31 +226,10 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Votes: 0"
-                    android:textSize="14dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="3dp"
-                    android:id="@+id/third_row_vote_txt"
-                    android:textStyle="italic"
-                    android:layout_toRightOf="@+id/input_third_row_userimg"
-                    android:layout_below="@+id/name3_lay"/>
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/third_row_voteBtn"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_vote_blue"/>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="10dp"
                     android:layout_below="@+id/input_third_row_userimg"
                     android:layout_marginLeft="70dp"
                     android:layout_marginRight="20dp"
@@ -356,33 +296,11 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Votes: 0"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="3dp"
-                    android:id="@+id/fourth_row_vote_txt"
-                    android:visibility="gone"
-                    android:textStyle="italic"
-                    android:layout_toRightOf="@+id/input_fourth_row_userimg"
-                    android:layout_below="@+id/name4_lay"/>
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_alignParentRight="true"
-                    android:id="@+id/fourth_row_voteBtn"
-                    android:visibility="gone"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_vote_blue"/>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_below="@+id/input_fourth_row_userimg"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="70dp"
                     android:layout_marginRight="20dp"
                     android:background="#716f6f"/>

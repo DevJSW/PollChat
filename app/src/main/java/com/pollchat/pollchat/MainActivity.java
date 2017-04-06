@@ -246,6 +246,8 @@ public class MainActivity extends AppCompatActivity
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setFirst_row_userimg(getApplicationContext(), model.getFirst_row_userimg());
                 viewHolder.setSecond_row_userimg(getApplicationContext(), model.getSecond_row_userimg());
+                viewHolder.setThird_row_userimg(getApplicationContext(), model.getThird_row_userimg());
+                viewHolder.setFourth_row_userimg(getApplicationContext(), model.getFourth_row_userimg());
                 viewHolder.setName(model.getName());
                 viewHolder.setCreated_date(model.getCreated_date());
 
@@ -376,6 +378,42 @@ public class MainActivity extends AppCompatActivity
 
 
                     Picasso.with(ctx).load(second_row_userimg).into(first_row_useri);
+                }
+            });
+        }
+
+        public void setThird_row_userimg(final Context ctx, final String third_row_userimg) {
+            final ImageView first_row_user = (ImageView) mView.findViewById(R.id.third_row_userimg);
+
+            Picasso.with(ctx).load(third_row_userimg).networkPolicy(NetworkPolicy.OFFLINE).into(first_row_user, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+
+
+                    Picasso.with(ctx).load(third_row_userimg).into(first_row_user);
+                }
+            });
+        }
+
+        public void setFourth_row_userimg(final Context ctx, final String fourth_row_userimg) {
+            final ImageView first_row_use = (ImageView) mView.findViewById(R.id.fourth_row_userimg);
+
+            Picasso.with(ctx).load(fourth_row_userimg).networkPolicy(NetworkPolicy.OFFLINE).into(first_row_use, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+
+
+                    Picasso.with(ctx).load(fourth_row_userimg).into(first_row_use);
                 }
             });
         }

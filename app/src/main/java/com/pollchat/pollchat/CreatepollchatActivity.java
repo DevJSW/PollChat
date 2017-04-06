@@ -32,8 +32,8 @@ import java.util.Date;
 public class CreatepollchatActivity extends AppCompatActivity {
 
     private EditText mFirstRowEdit, mSecondRowEdit, mThirdRowEdit, mFourthRowEdit, mPollQuiz;
-    private TextView mFirstRowVoteTxt, mSecondRowVoteTxt, mThirdRowVStxt, mFourthRowVStxt;
-    private ImageView mFirstRowVoteBtn, mSecondRowVoteBtn, mInputFirstRowUserImg, mInputSecondRowUserImg, mInputFourthRowUserImg, mInputThirdRowUserImg, mAddRowBtn, mAddRowBtn2;
+    private TextView mThirdRowVStxt, mFourthRowVStxt;
+    private ImageView  mInputFirstRowUserImg, mInputSecondRowUserImg, mInputFourthRowUserImg, mInputThirdRowUserImg, mAddRowBtn, mAddRowBtn2;
     private Button mStartPoll;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabasePolls;
@@ -70,10 +70,6 @@ public class CreatepollchatActivity extends AppCompatActivity {
         mDatabasePolls = FirebaseDatabase.getInstance().getReference().child("Polls");
 
 
-        // vote'n btn's
-        mFirstRowVoteBtn = (ImageView) findViewById(R.id.first_row_voteBtn);
-        mSecondRowVoteBtn = (ImageView) findViewById(R.id.second_row_voteBtn);
-
         final RelativeLayout third_row_layout = (RelativeLayout) findViewById(R.id.third_relative_layout);
         final RelativeLayout fourth_row_layout = (RelativeLayout) findViewById(R.id.fourth_relative_layout);
 
@@ -108,9 +104,6 @@ public class CreatepollchatActivity extends AppCompatActivity {
         mThirdRowVStxt = (TextView) findViewById(R.id.thirdrow_vs_txt);
         mFourthRowVStxt = (TextView) findViewById(R.id.fourthrow_vs_txt);
 
-        //vote: 0 text
-        mFirstRowVoteTxt = (TextView) findViewById(R.id.first_row_vote_txt);
-        mSecondRowVoteTxt = (TextView) findViewById(R.id.second_row_vote_txt);
 
         // start poll button
         mStartPoll = (Button) findViewById(R.id.startPollBtn);
@@ -171,7 +164,6 @@ public class CreatepollchatActivity extends AppCompatActivity {
 
         mProgress = new ProgressDialog(this);
 
-        checkifEditIsClear();
 
     }
 
@@ -290,34 +282,6 @@ public class CreatepollchatActivity extends AppCompatActivity {
         }
     }
 
-    private void checkifEditIsClear() {
-
-        String inputName = mFirstRowEdit.getText().toString().trim();
-
-        // if editTXT is EMPTY!
-        if (TextUtils.isEmpty(inputName)) {
-
-            // make vote icon DISAPPEAR
-            mFirstRowVoteBtn.setVisibility(View.GONE);
-            mSecondRowVoteBtn.setVisibility(View.GONE);
-
-            // make votes: 0 text VANISH!
-            mFirstRowVoteTxt.setVisibility(View.GONE);
-            mSecondRowVoteTxt.setVisibility(View.GONE);
-
-
-
-        } else {
-
-            // make vote icons VISIBLE
-            mFirstRowVoteBtn.setVisibility(View.VISIBLE);
-            mSecondRowVoteBtn.setVisibility(View.VISIBLE);
-
-            // make votes: 0 text visible
-            mFirstRowVoteTxt.setVisibility(View.VISIBLE);
-            mSecondRowVoteTxt.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -328,22 +292,23 @@ public class CreatepollchatActivity extends AppCompatActivity {
             mImageUri = data.getData();
             mInputFirstRowUserImg.setImageURI(mImageUri);
 
-        } else {
 
+        } else if (requestCode == GALLERY_REQUEST2 && resultCode == RESULT_OK) {
             mImageUri2 = data.getData();
             mInputSecondRowUserImg.setImageURI(mImageUri2);
 
-        } if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+        } else if (requestCode == GALLERY_REQUEST3 && resultCode == RESULT_OK) {
 
             mImageUri3 = data.getData();
             mInputThirdRowUserImg.setImageURI(mImageUri3);
 
-        } else {
+        } else if (requestCode == GALLERY_REQUEST4 && resultCode == RESULT_OK) {
 
             mImageUri4 = data.getData();
             mInputFourthRowUserImg.setImageURI(mImageUri4);
 
         }
+
     }
 
 

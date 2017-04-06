@@ -376,8 +376,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:src="@drawable/ic_share"
                     android:layout_marginTop="1dp"
                     android:scaleType="fitXY"
@@ -392,12 +392,12 @@
                     android:text="0"/>
 
                 <ImageView
-                    android:layout_width="17dp"
-                    android:layout_height="15dp"
-                    android:src="@drawable/ic_heart"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_voters"
                     android:paddingTop="1dp"
                     android:id="@+id/buttonCall"
-                    android:scaleType="fitCenter"
+                    android:scaleType="fitXY"
                     android:layout_marginRight="40dp"/>
 
                 <TextView
@@ -409,7 +409,7 @@
 
                 <ImageView
                     android:layout_width="16dp"
-                    android:layout_height="15dp"
+                    android:layout_height="16dp"
                     android:id="@+id/chatBtn"
                     android:src="@drawable/ic_chat"
                     android:scaleType="fitXY"/>
