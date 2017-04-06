@@ -263,6 +263,19 @@ public class MainActivity extends AppCompatActivity
 
                 });
 
+                mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(post_key);
+                mQueryComments.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.mCommentCount.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
         };

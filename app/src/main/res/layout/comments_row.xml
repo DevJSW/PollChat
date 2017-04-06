@@ -111,7 +111,7 @@
                     android:layout_height="140dp"
                     android:id="@+id/inside_view2"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/ic_placehlder"
+                    android:src="@drawable/placeholder_image"
                     android:visibility="gone"
                     android:adjustViewBounds="true"
                     android:background="#00ffffff"

@@ -40,7 +40,10 @@
             android:label="Create PollChat" />
         <activity
             android:name=".CommentsActivity"
-            android:label="Comments"/>
+            android:label="Comments" />
+        <activity
+            android:name=".OpenPhotoOnPollActivity"
+            android:label=""/>
     </application>
 
 </manifest>
