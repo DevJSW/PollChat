@@ -2,8 +2,10 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_margin="5dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="#00ffffff"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,9 +20,8 @@
             android:layout_marginTop="10dp">
 
             <ImageButton
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/placeholder_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:background="#00ffffff"
                 android:padding="2dp"
                 android:adjustViewBounds="true"
@@ -30,8 +31,8 @@
 
 
             <ImageButton
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/placeholder_image"
                 android:background="#00ffffff"
                 android:padding="2dp"
@@ -47,14 +48,46 @@
             android:layout_margin="5dp"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_name"
+                android:paddingTop="5dp"
+                android:text="Name"/>
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_toRightOf="@+id/post_name"
+                    android:src="@drawable/ic_validate"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="date"
+                    android:paddingTop="5dp"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/date" />
+
+            </RelativeLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Poll Question"
                 android:id="@+id/poll_question"
-                android:textSize="16dp"
-                android:paddingTop="5dp"
+                android:textSize="15dp"
+                android:paddingTop="2dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
                 android:textStyle="bold" />
@@ -77,6 +110,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:scaleType="fitXY"
                     android:id="@+id/first_row_userimg"
                     android:src="@drawable/placeholder_image"/>
 
@@ -137,6 +171,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:scaleType="fitXY"
                     android:id="@+id/second_row_userimg"
                     android:src="@drawable/placeholder_image"/>
 
@@ -196,6 +231,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:scaleType="fitXY"
                     android:id="@+id/third_row_userimg"
                     android:src="@drawable/placeholder_image"/>
 
@@ -256,6 +292,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:id="@+id/fourth_row_userimg"
+                    android:scaleType="fitXY"
                     android:src="@drawable/placeholder_image"/>
 
                 <TextView
@@ -328,38 +365,61 @@
 
             </LinearLayout>
 
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="This pollchat was created on "
-                    android:layout_marginTop="5dp" />
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:src="@drawable/ic_share"
+                    android:layout_marginTop="1dp"
+                    android:scaleType="fitXY"
+                    android:id="@+id/shareBtn"
+                    android:layout_marginRight="40dp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/created_date"/>
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:id="@+id/likeCount"
+                    android:paddingLeft="7dp"
+                    android:text="0"/>
+
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_heart"
+                    android:paddingTop="1dp"
+                    android:id="@+id/buttonCall"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="40dp"/>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" &amp; closes"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:layout_marginTop="5dp"
-                    android:id="@+id/close_date"/>
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:id="@+id/commentCount"
+                    android:paddingLeft="7dp"
+                    android:text="0"/>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="15dp"
+                    android:id="@+id/chatBtn"
+                    android:src="@drawable/ic_chat"
+                    android:scaleType="fitXY"/>
+
 
             </LinearLayout>
+
+
+
+
 
 
         </LinearLayout>
@@ -367,6 +427,11 @@
     </LinearLayout>
 
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#807d7d"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="bottom"/>
 
 </android.support.v7.widget.CardView>

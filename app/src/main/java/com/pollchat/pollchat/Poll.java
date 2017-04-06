@@ -5,13 +5,15 @@ package com.pollchat.pollchat;
  */
 public class Poll {
 
-    private String created_date, first_row_username, first_row_userimg, first_row_votecounter, poll_question , second_row_username, second_row_userimg, third_row_userimg, third_row_username, fourth_row_userimg, fouth_row_username;
+    private String name, image, created_date, first_row_username, first_row_userimg, first_row_votecounter, poll_question , second_row_username, second_row_userimg, third_row_userimg, third_row_username, fourth_row_userimg, fouth_row_username;
 
     public Poll() {
 
     }
 
-    public Poll(String created_date, String first_row_username, String first_row_userimg, String first_row_votecounter, String poll_question, String second_row_username, String second_row_userimg, String third_row_userimg, String third_row_username, String fourth_row_userimg, String fouth_row_username) {
+    public Poll(String name, String photo, String image, String created_date, String first_row_username, String first_row_userimg, String first_row_votecounter, String poll_question, String second_row_username, String second_row_userimg, String third_row_userimg, String third_row_username, String fourth_row_userimg, String fouth_row_username) {
+        this.name = name;
+        this.image = image;
         this.created_date = created_date;
         this.first_row_username = first_row_username;
 
@@ -113,5 +115,21 @@ public class Poll {
 
     public void setCreated_date(String created_date) {
         this.created_date = created_date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
