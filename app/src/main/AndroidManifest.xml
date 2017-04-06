@@ -37,7 +37,10 @@
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".CreatepollchatActivity"
-            android:label="Create PollChat"/>
+            android:label="Create PollChat" />
+        <activity
+            android:name=".CommentsActivity"
+            android:label="Comments"/>
     </application>
 
 </manifest>

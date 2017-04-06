@@ -5,7 +5,7 @@ package com.pollchat.pollchat;
  */
 public class Poll {
 
-    private String name, image, created_date, first_row_username, first_row_userimg, first_row_votecounter, poll_question , second_row_username, second_row_userimg, third_row_userimg, third_row_username, fourth_row_userimg, fouth_row_username;
+    private String name, image, created_date, first_row_username, first_row_userimg, first_row_votecounter, poll_question , second_row_username, second_row_userimg, third_row_userimg, third_row_username, fourth_row_userimg, fourth_row_username;
 
     public Poll() {
 
@@ -25,7 +25,7 @@ public class Poll {
         this.third_row_userimg = third_row_userimg;
         this.third_row_username = third_row_username;
         this.fourth_row_userimg = fourth_row_userimg;
-        this.fouth_row_username = fouth_row_username;
+        this.fourth_row_username = fouth_row_username;
     }
 
 
@@ -101,12 +101,12 @@ public class Poll {
         this.fourth_row_userimg = fourth_row_userimg;
     }
 
-    public String getFouth_row_username() {
-        return fouth_row_username;
+    public String getFourth_row_username() {
+        return fourth_row_username;
     }
 
-    public void setFouth_row_username(String fouth_row_username) {
-        this.fouth_row_username = fouth_row_username;
+    public void setFourth_row_username(String fourth_row_username) {
+        this.fourth_row_username = fourth_row_username;
     }
 
     public String getCreated_date() {

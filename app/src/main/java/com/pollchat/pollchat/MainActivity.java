@@ -243,6 +243,8 @@ public class MainActivity extends AppCompatActivity
                 viewHolder.setPoll_question(model.getPoll_question());
                 viewHolder.setFirst_row_username(model.getFirst_row_username());
                 viewHolder.setSecond_row_username(model.getSecond_row_username());
+                viewHolder.setThird_row_username(model.getThird_row_username());
+                viewHolder.setFourth_row_username(model.getFourth_row_username());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setFirst_row_userimg(getApplicationContext(), model.getFirst_row_userimg());
                 viewHolder.setSecond_row_userimg(getApplicationContext(), model.getSecond_row_userimg());
@@ -276,7 +278,7 @@ public class MainActivity extends AppCompatActivity
 
         View mView;
 
-        ImageView mChatBtn, mCall,mCardPhoto, mInside, mImage, mShareBtn, mAnonymous;
+        ImageView mChatBtn;
         DatabaseReference mDatabaseLike;
         FirebaseAuth mAuth;
         TextView mCommentCount, mLikeCount, mAnonymousText;
@@ -291,8 +293,6 @@ public class MainActivity extends AppCompatActivity
             mAuth = FirebaseAuth.getInstance();
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
             mDatabaseLike.keepSynced(true);
-
-            mImage = (ImageView) mView.findViewById(R.id.post_image);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
         }
@@ -314,6 +314,18 @@ public class MainActivity extends AppCompatActivity
 
             TextView post_Second_row_username = (TextView) mView.findViewById(R.id.second_row_username);
             post_Second_row_username.setText(Second_row_username);
+        }
+
+        public void setThird_row_username(String third_row_username) {
+
+            TextView post_third_row_username = (TextView) mView.findViewById(R.id.third_row_username);
+            post_third_row_username.setText(third_row_username);
+        }
+
+        public void setFourth_row_username(String fourth_row_username) {
+
+            TextView post_fourth_row_username = (TextView) mView.findViewById(R.id.fourth_row_username);
+            post_fourth_row_username.setText(fourth_row_username);
         }
 
         public void setName(String name) {

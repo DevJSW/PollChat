@@ -177,6 +177,8 @@ public class CreatepollchatActivity extends AppCompatActivity {
         final String poll_quiz = mPollQuiz.getText().toString().trim();
         final String first_row_username = mFirstRowEdit.getText().toString().trim();
         final String second_row_username = mSecondRowEdit.getText().toString().trim();
+        final String third_row_username = mThirdRowEdit.getText().toString().trim();
+        final String fourth_row_username = mFourthRowEdit.getText().toString().trim();
 
         final String user_id = auth.getCurrentUser().getUid();
 
@@ -236,6 +238,8 @@ public class CreatepollchatActivity extends AppCompatActivity {
                                                                     newPost.child("poll_question").setValue(poll_quiz);
                                                                     newPost.child("first_row_username").setValue(first_row_username);
                                                                     newPost.child("second_row_username").setValue(second_row_username);
+                                                                    newPost.child("third_row_username").setValue(third_row_username);
+                                                                    newPost.child("fourth_row_username").setValue(fourth_row_username);
                                                                     newPost.child("first_row_userimg").setValue(downloadUrl1.toString());
                                                                     newPost.child("second_row_userimg").setValue(downloadUrl2.toString());
                                                                     newPost.child("third_row_userimg").setValue(downloadUrl3.toString());
