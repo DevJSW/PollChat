@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,8 +58,12 @@ public class MainActivity extends AppCompatActivity
     private StorageReference mStorage;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
-    private Boolean mProcessLike = false;
-    private DatabaseReference mDatabaseLike;
+    private Boolean mProcessVote = false;
+    private DatabaseReference mDatabaseTotalVotes;
+    private DatabaseReference mDatabaseVotesForFirstRow;
+    private DatabaseReference mDatabaseVotesForSecondRow;
+    private DatabaseReference mDatabaseVotesForThirdRow;
+    private DatabaseReference mDatabaseVotesForFourthRow;
 
     private Query mQueryLetters;
     private Query mQueryComments;
@@ -110,7 +115,11 @@ public class MainActivity extends AppCompatActivity
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabasePolls = FirebaseDatabase.getInstance().getReference().child("Polls");
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Comments");
-        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+        mDatabaseTotalVotes = FirebaseDatabase.getInstance().getReference().child("Total_Votes");
+        mDatabaseVotesForFirstRow = FirebaseDatabase.getInstance().getReference().child("First_row_votes");
+        mDatabaseVotesForSecondRow = FirebaseDatabase.getInstance().getReference().child("Second_row_votes");
+        mDatabaseVotesForThirdRow = FirebaseDatabase.getInstance().getReference().child("Third_row_votes");
+        mDatabaseVotesForFourthRow = FirebaseDatabase.getInstance().getReference().child("Fourth_row_votes");
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mPollsList = (RecyclerView) findViewById(R.id.letters_list);
         mPollsList.setLayoutManager(new LinearLayoutManager(this));
@@ -118,7 +127,11 @@ public class MainActivity extends AppCompatActivity
 
         mDatabasePolls.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
-        mDatabaseLike.keepSynced(true);
+        mDatabaseTotalVotes.keepSynced(true);
+        mDatabaseVotesForFirstRow.keepSynced(true);
+        mDatabaseVotesForSecondRow.keepSynced(true);
+        mDatabaseVotesForThirdRow.keepSynced(true);
+        mDatabaseVotesForFourthRow.keepSynced(true);
 
 
 
@@ -253,15 +266,232 @@ public class MainActivity extends AppCompatActivity
                 viewHolder.setName(model.getName());
                 viewHolder.setCreated_date(model.getCreated_date());
 
+                viewHolder.setFirstRowVoteBtn(post_key);
+                viewHolder.setSecondRowVoteBtn(post_key);
+                viewHolder.setThirdRowVoteBtn(post_key);
+                viewHolder.setFourthRowVoteBtn(post_key);
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                mDatabaseTotalVotes.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.equals(post_key)) {
+                            viewHolder.mTotalVoteCounter.setText(dataSnapshot.getChildrenCount() + "");
+
+                        } else {
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                viewHolder.mFirstRowVoteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
+                        mProcessVote = true;
+
+                        mDatabaseVotesForFirstRow.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessVote) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                        mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessVote = false;
+                                    }else {
+
+                                        mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mProcessVote = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                     }
-
                 });
+
+                viewHolder.mSecondRowVoteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessVote = true;
+
+                        mDatabaseVotesForSecondRow.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessVote) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                        mDatabaseVotesForSecondRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessVote = false;
+                                    }else {
+
+                                        mDatabaseVotesForSecondRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mProcessVote = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
+
+                viewHolder.mThirdRowVoteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessVote = true;
+
+                        mDatabaseVotesForThirdRow.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessVote) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                        mDatabaseVotesForThirdRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessVote = false;
+                                    }else {
+
+                                        mDatabaseVotesForThirdRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mProcessVote = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
+
+                viewHolder.mFourthRowVoteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessVote = true;
+
+                        mDatabaseVotesForFourthRow.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessVote) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                        mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessVote = false;
+                                    }else {
+
+                                        mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mProcessVote = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
+
+
+
+
+
+
+                mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String third_row = (String) dataSnapshot.child("third_row_username").getValue();
+                        final String fourth_row = (String) dataSnapshot.child("fourth_row_username").getValue();
+
+                        RelativeLayout third_card_row = (RelativeLayout) findViewById(R.id.third_card_relative_layout);
+                        RelativeLayout fourth_card_row = (RelativeLayout) findViewById(R.id.fourth_card_relative_layout);
+
+                        if (third_row != null) {
+
+                            third_card_row.setVisibility(View.GONE);
+
+                        } else {
+
+                            third_card_row.setVisibility(View.VISIBLE);
+                        }
+                        if (fourth_row != null) {
+
+                            fourth_card_row.setVisibility(View.GONE);
+                        } else {
+
+                            fourth_card_row.setVisibility(View.VISIBLE);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+                viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent cardonClick = new Intent(MainActivity.this, CommentsActivity.class);
+                        cardonClick.putExtra("heartraise_id", post_key );
+                        startActivity(cardonClick);
+                    }
+                });
+
+
 
                 mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(post_key);
                 mQueryComments.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -275,6 +505,72 @@ public class MainActivity extends AppCompatActivity
 
                     }
                 });
+
+                // COUNT FIRST ROW VOTES
+                mDatabaseVotesForFirstRow.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.first_row_votecounter.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                // COUNT second ROW VOTES
+                mDatabaseVotesForSecondRow.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.second_row_votecounter.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                // COUNT THIRD ROW VOTES
+                mDatabaseVotesForThirdRow.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.third_row_votecounter.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                // COUNT FOURTH ROW VOTES
+                mDatabaseVotesForFourthRow.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.fourth_row_votecounter.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                // COUNT TOTAL VOTES
+                mDatabaseTotalVotes.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.total_vote_count.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
 
@@ -291,10 +587,10 @@ public class MainActivity extends AppCompatActivity
 
         View mView;
 
-        ImageView mChatBtn;
-        DatabaseReference mDatabaseLike;
+        ImageView mChatBtn, mFirstRowVoteBtn, mSecondRowVoteBtn, mThirdRowVoteBtn,  mFourthRowVoteBtn ;
+        DatabaseReference mDatabaseTotalVotes,mDatabaseVotesForFirstRow, mDatabaseVotesForSecondRow, mDatabaseVotesForThirdRow, mDatabaseVotesForFourthRow;
         FirebaseAuth mAuth;
-        TextView mCommentCount, mLikeCount, mAnonymousText;
+        TextView mCommentCount, mTotalVoteCounter, first_row_votecounter, second_row_votecounter, third_row_votecounter, fourth_row_votecounter, total_vote_count;
         DatabaseReference mDatabase;
         ProgressBar mProgressBar;
 
@@ -304,12 +600,123 @@ public class MainActivity extends AppCompatActivity
             mView = itemView;
 
             mAuth = FirebaseAuth.getInstance();
-            mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
-            mDatabaseLike.keepSynced(true);
+            mDatabaseTotalVotes = FirebaseDatabase.getInstance().getReference().child("Total_votes");
+            mDatabaseTotalVotes.keepSynced(true);
+            mDatabaseVotesForFirstRow = FirebaseDatabase.getInstance().getReference().child("First_row_votes");
+            mDatabaseVotesForFirstRow.keepSynced(true);
+            mDatabaseVotesForSecondRow = FirebaseDatabase.getInstance().getReference().child("Second_row_votes");
+            mDatabaseVotesForSecondRow.keepSynced(true);
+            mDatabaseVotesForThirdRow = FirebaseDatabase.getInstance().getReference().child("Third_row_votes");
+            mDatabaseVotesForThirdRow.keepSynced(true);
+            mDatabaseVotesForFourthRow = FirebaseDatabase.getInstance().getReference().child("Fourth_row_votes");
+            mDatabaseVotesForFourthRow.keepSynced(true);
+            mCommentCount = (TextView) mView.findViewById(R.id.commentCount);
+            mTotalVoteCounter = (TextView) mView.findViewById(R.id.total_vote_count);
+            first_row_votecounter = (TextView) mView.findViewById(R.id. first_row_votecounter);
+            second_row_votecounter = (TextView) mView.findViewById(R.id.second_row_votecounter);
+            third_row_votecounter = (TextView) mView.findViewById(R.id.third_row_votecounter);
+            fourth_row_votecounter = (TextView) mView.findViewById(R.id.fourth_row_votecounter);
+            total_vote_count = (TextView) mView.findViewById(R.id.total_vote_count);
+            mChatBtn = (ImageView) mView.findViewById(R.id.chatBtn);
+            mFirstRowVoteBtn = (ImageView) mView.findViewById(R.id.first_row_voteBtn);
+            mSecondRowVoteBtn = (ImageView) mView.findViewById(R.id.second_row_voteBtn);
+            mThirdRowVoteBtn = (ImageView) mView.findViewById(R.id.third_row_voteBtn);
+            mFourthRowVoteBtn = (ImageView) mView.findViewById(R.id.fourth_row_voteBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
         }
 
+        public void setFirstRowVoteBtn(final String post_key) {
+
+            mDatabaseVotesForFirstRow.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mFirstRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
+                    } else {
+                        mFirstRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+        public void setSecondRowVoteBtn(final String post_key) {
+
+            mDatabaseVotesForSecondRow.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mSecondRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
+                    } else {
+                        mSecondRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+        public void setThirdRowVoteBtn(final String post_key) {
+
+            mDatabaseVotesForThirdRow.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mThirdRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
+                    } else {
+                        mThirdRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+        public void setFourthRowVoteBtn(final String post_key) {
+
+            mDatabaseVotesForFourthRow.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mFourthRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
+                    } else {
+                        mFourthRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
 
         public void setPoll_question(String poll_question) {
 

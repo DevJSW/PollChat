@@ -224,6 +224,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/third_card_relative_layout"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
@@ -272,20 +273,22 @@
                     android:layout_alignParentRight="true"
                     android:id="@+id/third_row_voteBtn" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#807d7d"
+                    android:layout_below="@+id/third_row_userimg"
+                    android:layout_marginTop="7dp"/>
+
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#807d7d"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="3dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:id="@+id/fourth_card_relative_layout"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -332,14 +335,16 @@
                     android:layout_alignParentRight="true"
                     android:id="@+id/fourth_row_voteBtn" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#807d7d"
+
+                    android:layout_below="@+id/fourth_row_userimg"
+                    android:layout_marginTop="7dp"/>
+
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="#807d7d"
-                android:layout_marginBottom="3dp"
-                android:layout_marginTop="3dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
