@@ -20,8 +20,8 @@
             android:layout_marginTop="10dp">
 
             <ImageButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="#00ffffff"
                 android:padding="2dp"
                 android:adjustViewBounds="true"
@@ -31,8 +31,8 @@
 
 
             <ImageButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/placeholder_image"
                 android:background="#00ffffff"
                 android:padding="2dp"
@@ -45,12 +45,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:id="@+id/main_lay"
+            android:background="@drawable/shape_bg_incoming_bubble"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="13dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:orientation="horizontal">
 
             <TextView
@@ -85,17 +91,19 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Poll Question"
+                android:layout_marginLeft="20dp"
                 android:id="@+id/poll_question"
                 android:textSize="15dp"
                 android:paddingTop="2dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
                 android:textStyle="bold" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="#807d7d"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"/>
 
@@ -103,6 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/first_row"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
@@ -179,6 +188,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="#807d7d"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"/>
 
@@ -187,6 +198,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
                 android:orientation="horizontal"
                 android:id="@+id/secnd_row">
 
@@ -260,7 +272,9 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:layout_marginRight="5dp"
                 android:background="#807d7d"
+                android:layout_marginLeft="15dp"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"/>
 
@@ -268,6 +282,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/third_card_relative_layout"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:orientation="horizontal">
@@ -341,6 +356,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:background="#807d7d"
+                    android:layout_marginRight="5dp"
                     android:layout_below="@+id/third_row_userimg"
                     android:layout_marginTop="7dp"/>
 
@@ -352,6 +368,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginLeft="15dp"
                 android:id="@+id/fourth_card_relative_layout"
                 android:orientation="horizontal">
 
@@ -424,7 +441,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:background="#807d7d"
-
+                    android:layout_marginRight="5dp"
                     android:layout_below="@+id/fourth_row_userimg"
                     android:layout_marginTop="7dp"/>
 
@@ -434,6 +451,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:orientation="horizontal">
 
             <TextView
@@ -455,7 +473,6 @@
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -468,7 +485,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/ic_share"
+                    android:src="@drawable/ic_share_white"
                     android:layout_marginTop="1dp"
                     android:scaleType="fitXY"
                     android:id="@+id/shareBtn"
@@ -478,14 +495,14 @@
                     android:layout_width="17dp"
                     android:layout_height="17dp"
                     android:id="@+id/likeCount"
-                    android:textColor="#ABABAB"
+                    android:textColor="#ffffff"
                     android:paddingLeft="7dp"
                     android:text="0"/>
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@drawable/ic_voters"
+                    android:src="@drawable/ic_voters_white"
                     android:paddingTop="1dp"
                     android:id="@+id/buttonCall"
                     android:scaleType="fitXY"
@@ -494,7 +511,7 @@
                 <TextView
                     android:layout_width="17dp"
                     android:layout_height="17dp"
-                    android:textColor="#ABABAB"
+                    android:textColor="#ffffff"
                     android:id="@+id/commentCount"
                     android:paddingLeft="7dp"
                     android:text="0"/>
@@ -503,16 +520,11 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:id="@+id/chatBtn"
-                    android:src="@drawable/ic_chat"
+                    android:src="@drawable/ic_chat_white"
                     android:scaleType="fitXY"/>
 
 
             </LinearLayout>
-
-
-
-
-
 
         </LinearLayout>
 

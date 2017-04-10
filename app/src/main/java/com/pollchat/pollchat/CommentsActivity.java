@@ -302,39 +302,6 @@ public class CommentsActivity extends AppCompatActivity {
                     }
                 });
 
-                mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
-
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        final String anonymous = (String) dataSnapshot.child("anonymous").getValue();
-
-                        if (anonymous != null) {
-
-
-
-                        } else {
-
-                            viewHolder.mImage.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    //Intent cardonClick = new Intent(CommentsActivity.this, ViewProfileActivity.class);
-                                    //cardonClick.putExtra("heartraise_id", post_key );
-                                    //startActivity(cardonClick);
-                                }
-                            });
-
-
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
             }
         };

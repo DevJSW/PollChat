@@ -85,7 +85,7 @@
             android:scaleType="fitCenter"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_sender"
+
             android:paddingTop="3dp"
             android:paddingBottom="8dp" />
 

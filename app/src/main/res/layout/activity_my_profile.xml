@@ -105,7 +105,7 @@
                     <Button
                         android:layout_width="130dp"
                         android:layout_height="37dp"
-                        android:background="@drawable/mybutton"
+                        android:background="@drawable/mybutton_grey"
                         android:text="Following"
                         android:textColor="#fff"
                         android:textAllCaps="false"
