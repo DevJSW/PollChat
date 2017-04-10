@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pollchat.pollchat.ProfileActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_marginBottom="5dp"
+        android:background="#00ffffff">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/imageRelative"
+                android:orientation="horizontal">
+
+
+                <RelativeLayout
+                    android:layout_width="70dp"
+                    android:id="@+id/user_img_relay"
+                    android:layout_height="70dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@+id/subscribeBtn"
+                    android:orientation="vertical">
+
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/inside_view"
+                        android:adjustViewBounds="true"
+                        android:background="#00ffffff"
+                        android:scaleType="fitXY" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/post_image"
+                        android:src="@drawable/placeholder_image"
+                        android:layout_alignBottom="@id/inside_view"
+                        android:layout_alignLeft="@id/inside_view"
+                        android:layout_alignTop="@id/inside_view"
+                        android:layout_alignRight="@id/inside_view"
+                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"
+                        android:background="#00ffffff" />
+
+
+                </RelativeLayout>
+
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/subscribeBtn"
+                    android:layout_marginTop="5dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_above="@+id/follow_btn_lay"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:background="#20ffffff"
+                        android:textColor="#b7b1b1"
+                        android:textSize="20dp"
+                        android:id="@+id/post_name"
+                        android:textStyle="bold"
+                        android:text="Username"/>
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="16dp"
+                        android:layout_toRightOf="@+id/post_name"
+                        android:layout_marginTop="3dp"
+                        android:src="@drawable/ic_validate"/>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/follow_btn_lay"
+                    android:layout_above="@+id/follow_info_lay"
+                    android:layout_marginTop="10dp">
+
+                    <ImageButton
+                        android:layout_width="130dp"
+                        android:layout_height="36dp"
+                        android:background="#00ffffff"
+                        android:src="@drawable/following_btn"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top"
+                        android:id="@+id/unfollowBtn" />
+
+
+                    <ImageButton
+                        android:layout_width="130dp"
+                        android:layout_height="37dp"
+                        android:src="@drawable/follow_btn"
+                        android:background="#00ffffff"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top"
+                        android:id="@+id/followBtn" />
+
+                    <Button
+                        android:layout_width="130dp"
+                        android:layout_height="37dp"
+                        android:src="@drawable/follow_btn"
+                        android:background="@drawable/mybutton"
+                        android:text="Edit"
+                        android:textColor="#fff"
+                        android:textAllCaps="false"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top"
+                        android:id="@+id/editBtn" />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/follow_info_lay"
+                    android:layout_gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <RelativeLayout
+                        android:id="@+id/followers_lay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="5dp"
+                        android:layout_gravity="left">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/followersCount"
+                            android:text="0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Followers"
+                            android:layout_marginLeft="3dp"
+                            android:layout_below="@+id/followersCount"/>
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/fbBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_weight="1"
+                        android:textColor="#ffffff"
+                        android:layout_gravity="center"
+                        android:src="@drawable/fb_btn_img">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/followingCount"
+                            android:text="0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Following"
+                            android:layout_marginLeft="3dp"
+                            android:layout_below="@+id/followingCount"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/twitterBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="right"
+                        android:src="@drawable/twitter_btn_img">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/pollsCount"
+                            android:text="0"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Polls"
+                            android:layout_marginLeft="3dp"
+                            android:layout_below="@+id/pollsCount"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="#ABABAB"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/polls_list"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@+id/imageRelative"
+                android:layout_alignParentBottom="true">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/progressBar2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No posted mail's."
+        android:textSize="15dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_margin="30dp"
+        android:id="@+id/noPostTxt"
+        android:textColor="@color/colorPrimary"/>
+
+
+</RelativeLayout>

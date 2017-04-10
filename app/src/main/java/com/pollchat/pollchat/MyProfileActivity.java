@@ -2,29 +2,22 @@ package com.pollchat.pollchat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,83 +31,68 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+public class MyProfileActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-
-    private String post_name = null;
-    String post_key = null;
-    private String uid_key = null;
-    private TextView mNoPostTxt;
+    String user_id = null;
+    String uid_key = null;
+    private Button mFollow, mUnfollow;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private ImageView mCallBtn, mImg;
-    private DatabaseReference mDatabaseUsers;
-    private DatabaseReference mDatabaseComment, mDatabaseFollowing;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabasePolls;
-    private ProgressBar mProgressBar;
-    private RecyclerView mPollsList;
-    private String user_uid = null;
-    private Uri mImageUri = null;
-    private static int GALLERY_REQUEST =1;
     private Boolean mProcessVote = false;
-    private DatabaseReference mDatabaseTotalVotes;
+    private DatabaseReference mDatabaseTotalVotes, mDatabasePostKey;
     private DatabaseReference mDatabaseVotesForFirstRow;
     private DatabaseReference mDatabaseVotesForSecondRow;
     private DatabaseReference mDatabaseVotesForThirdRow;
     private DatabaseReference mDatabaseVotesForFourthRow;
-
-    private Query mQueryFollowing;
+    private DatabaseReference mDatabaseComment;
+    private DatabaseReference mDatabasePolls;
+    private ProgressBar mProgressBar;
+    private ImageView mUserImg;
+    private TextView mUsername, mFollowersCount, mPollsCount,  mFollowingCount;
+    private DatabaseReference mDatabaseFollowers, mDatabaseFollowing, mDatabase, mDatabaseUsers;
+    private Boolean mProcessFollow = false;
+    private RecyclerView mPollsList;
+    private String mPostKey = null;
+    private FirebaseAuth mAuth;
     private Query mQueryComments;
-    private Query mQueryUidInPoll;
-
+    private Query mQueryPolls;
+    private Query mQueryResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_my_profile);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mPostKey = getIntent().getExtras().getString("heartraise_id");
+        uid_key = getIntent().getExtras().getString("uid_key");
 
-        mImg = (ImageView) findViewById(R.id.post_userimg);
-       // mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+        mAuth = FirebaseAuth.getInstance();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mUserImg = (ImageView) findViewById(R.id.post_image);
+        mFollowersCount = (TextView) findViewById(R.id.followersCount);
+        mFollowingCount = (TextView) findViewById(R.id.followingCount);
+        mPollsCount = (TextView) findViewById(R.id.pollsCount);
+        mUsername = (TextView) findViewById(R.id.post_name);
 
-                Intent cardonClick = new Intent(MainActivity.this, CreatepollchatActivity.class);
-                startActivity(cardonClick);
+        // will have the list of ppl who are following me
+        mDatabaseFollowers = FirebaseDatabase.getInstance().getReference().child("Followers");
+        mDatabaseFollowers.keepSynced(true);
 
-            }
-        });
+        // will have list of ppl i'm following
+        mDatabaseFollowing = FirebaseDatabase.getInstance().getReference().child("Following");
+        mDatabaseFollowing.keepSynced(true);
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabaseUsers.keepSynced(true);
+        mDatabasePostKey = FirebaseDatabase.getInstance().getReference().child("Polls").child(mPostKey);
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Polls");
+        mDatabase.keepSynced(true);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        mAuth = FirebaseAuth.getInstance();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items
-                refreshItems();
-            }
-        });
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabasePolls = FirebaseDatabase.getInstance().getReference().child("Polls");
-        mDatabaseFollowing = FirebaseDatabase.getInstance().getReference().child("Following");
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Comments");
         mDatabaseTotalVotes = FirebaseDatabase.getInstance().getReference().child("Total_Votes");
         mDatabaseVotesForFirstRow = FirebaseDatabase.getInstance().getReference().child("First_row_votes");
@@ -122,11 +100,10 @@ public class MainActivity extends AppCompatActivity
         mDatabaseVotesForThirdRow = FirebaseDatabase.getInstance().getReference().child("Third_row_votes");
         mDatabaseVotesForFourthRow = FirebaseDatabase.getInstance().getReference().child("Fourth_row_votes");
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
-        mPollsList = (RecyclerView) findViewById(R.id.letters_list);
+        mPollsList = (RecyclerView) findViewById(R.id.polls_list);
         mPollsList.setLayoutManager(new LinearLayoutManager(this));
         mPollsList.setHasFixedSize(true);
 
-        mDatabaseFollowing.keepSynced(true);
         mDatabasePolls.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
         mDatabaseTotalVotes.keepSynced(true);
@@ -135,24 +112,59 @@ public class MainActivity extends AppCompatActivity
         mDatabaseVotesForThirdRow.keepSynced(true);
         mDatabaseVotesForFourthRow.keepSynced(true);
 
-        // show polls from ppl i'm following
-        mQueryFollowing = mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).orderByChild("following_post_key").equalTo(post_key);
 
-        mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+
+        mFollow = (Button) findViewById(R.id.followBtn);
+        mFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mProcessFollow = true;
+
+                mDatabaseFollowers.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (mProcessFollow) {
+
+                            if (!dataSnapshot.child(mPostKey).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                mDatabaseFollowers.child(mPostKey).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).child(mPostKey).setValue(mAuth.getCurrentUser().getUid());
+                                mProcessFollow = false;
+
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
+        // COUNT NUMBER OF FOLLOWERS
+        mDatabaseFollowers.child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String post_image = (String) dataSnapshot.child("image").getValue();
-                post_name = (String) dataSnapshot.child("name").getValue();
+                mFollowersCount.setText(dataSnapshot.getChildrenCount() + "");
+            }
 
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                View hView =  navigationView.getHeaderView(0);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                ImageView nav_user = (ImageView)hView.findViewById(R.id.nav_userImg);
-                TextView nav_username = (TextView)hView.findViewById(R.id.nav_username);
+            }
+        });
 
-                nav_username.setText(post_name);
-
-                Picasso.with(MainActivity.this).load(post_image).into(nav_user);
+        // COUNT NUMBER OF PPL I'M FOLLOWING
+        mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mFollowingCount.setText(dataSnapshot.getChildrenCount() + "");
             }
 
             @Override
@@ -163,78 +175,114 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        checkUserExists();
-        checkForNetwork();
+        // COUNT NUMBER OF POLLS
+        mQueryPolls = mDatabase.orderByChild("uid").equalTo(uid_key);
+        mQueryPolls.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mPollsCount.setText(dataSnapshot.getChildrenCount() + "");
+            }
 
-    }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-
-    private void checkForNetwork() {
-
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo ninfo = cm.getActiveNetworkInfo();
-
-        if (ninfo != null && ninfo.isConnected()) {
-
-
-        } else {
+            }
+        });
 
 
-            Toast.makeText(MainActivity.this, "You are not connected to Internet... Please Enable Internet!", Toast.LENGTH_LONG)
-                    .show();
+        mUnfollow = (Button) findViewById(R.id.unfollowBtn);
+        mUnfollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        }
-    }
+                mProcessFollow = true;
 
-    private void checkUserExists() {
+                mDatabaseFollowers.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-        mProgressBar.setVisibility(View.VISIBLE);
-        final String user_id = mAuth.getCurrentUser().getUid();
+                        if (mProcessFollow) {
 
-        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                            if (dataSnapshot.child(mPostKey).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                mDatabaseFollowers.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).child(mPostKey).removeValue();
+                                mProcessFollow = false;
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+        });
+
+
+
+        mDatabase.child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                user_id = (String) dataSnapshot.child("uid").getValue();
 
-                if (!dataSnapshot.hasChild(user_id)) {
+                mDatabaseUsers.child(user_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String post_name = (String) dataSnapshot.child("name").getValue();
+                        String post_image = (String) dataSnapshot.child("image").getValue();
 
-                    mProgressBar.setVisibility(View.GONE);
+                        mUsername.setText(post_name);
 
-                    Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
+                        Picasso.with(MyProfileActivity.this).load(post_image).into(mUserImg);
+                    }
 
-                }else {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                    mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        // check if i'm a follower
+        checkFollowers();
+
+    }
+
+    private void checkFollowers() {
+
+        mDatabaseFollowers.child(mPostKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    mFollow.setVisibility(View.GONE);
+
+                } else {
+                    mFollow.setVisibility(View.VISIBLE);
                 }
-
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-                mProgressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    void refreshItems() {
-        // Load items
-        // ...
-
-        // Load complete
-        onItemsLoadComplete();
-    }
-
-    void onItemsLoadComplete() {
-        // Update the adapter and notify data set changed
-        // ...
-
-        // Stop refresh animation
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
 
@@ -248,14 +296,14 @@ public class MainActivity extends AppCompatActivity
                 Poll.class,
                 R.layout.poll_row,
                 LetterViewHolder.class,
-                mDatabasePolls
+                mQueryPolls
 
 
         ) {
             @Override
             protected void populateViewHolder(final LetterViewHolder viewHolder, final Poll model, int position) {
 
-                post_key = getRef(position).getKey();
+                final String post_key = getRef(position).getKey();
 
                 viewHolder.setPoll_question(model.getPoll_question());
                 viewHolder.setFirst_row_username(model.getFirst_row_username());
@@ -292,64 +340,51 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-                mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        uid_key = (String) dataSnapshot.child("uid").getValue();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-                 viewHolder.mFirstRowVoteBtn.setOnClickListener(new View.OnClickListener() {
+                viewHolder.mFirstRowVoteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         mProcessVote = true;
 
 
-                                    mDatabaseVotesForFirstRow.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                        mDatabaseVotesForFirstRow.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                            if(mProcessVote) {
+                                if(mProcessVote) {
 
-                                                if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
-                                                    mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                                    mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                                    viewHolder.mSecondRowVoteBtn.setVisibility(View.VISIBLE);
-                                                    viewHolder.mThirdRowVoteBtn.setVisibility(View.VISIBLE);
-                                                    viewHolder.mFourthRowVoteBtn.setVisibility(View.VISIBLE);
-                                                    mProcessVote = false;
-                                                }else {
+                                        mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        viewHolder.mSecondRowVoteBtn.setVisibility(View.VISIBLE);
+                                        viewHolder.mThirdRowVoteBtn.setVisibility(View.VISIBLE);
+                                        viewHolder.mFourthRowVoteBtn.setVisibility(View.VISIBLE);
+                                        mProcessVote = false;
+                                    }else {
 
-                                                    mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                                    mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                                    viewHolder.mSecondRowVoteBtn.setVisibility(View.GONE);
-                                                    viewHolder.mThirdRowVoteBtn.setVisibility(View.GONE);
-                                                    viewHolder.mFourthRowVoteBtn.setVisibility(View.GONE);
-                                                    mProcessVote = false;
+                                        mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        viewHolder.mSecondRowVoteBtn.setVisibility(View.GONE);
+                                        viewHolder.mThirdRowVoteBtn.setVisibility(View.GONE);
+                                        viewHolder.mFourthRowVoteBtn.setVisibility(View.GONE);
+                                        mProcessVote = false;
 
-                                                }
-
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
+                                    }
 
                                 }
+                            }
 
-            });
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                });
 
 
                 viewHolder.mSecondRowVoteBtn.setOnClickListener(new View.OnClickListener() {
@@ -397,7 +432,6 @@ public class MainActivity extends AppCompatActivity
                 });
 
 
-
                 viewHolder.mThirdRowVoteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -441,6 +475,7 @@ public class MainActivity extends AppCompatActivity
 
                     }
                 });
+
 
 
                 viewHolder.mFourthRowVoteBtn.setOnClickListener(new View.OnClickListener() {
@@ -487,39 +522,6 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-                mDatabaseVotesForFourthRow.child(post_key).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        if(mProcessVote) {
-
-                            if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
-
-                                mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                viewHolder.mFirstRowVoteBtn.setVisibility(View.VISIBLE);
-                                viewHolder.mSecondRowVoteBtn.setVisibility(View.VISIBLE);
-                                viewHolder.mThirdRowVoteBtn.setVisibility(View.VISIBLE);
-                                mProcessVote = false;
-                            }else {
-
-                                mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                viewHolder.mFirstRowVoteBtn.setVisibility(View.GONE);
-                                viewHolder.mSecondRowVoteBtn.setVisibility(View.GONE);
-                                viewHolder.mThirdRowVoteBtn.setVisibility(View.GONE);
-                                mProcessVote = false;
-
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
 
 
@@ -565,7 +567,7 @@ public class MainActivity extends AppCompatActivity
                 viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(MainActivity.this, CommentsActivity.class);
+                        Intent cardonClick = new Intent(MyProfileActivity.this, CommentsActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
                         startActivity(cardonClick);
                     }
@@ -574,9 +576,8 @@ public class MainActivity extends AppCompatActivity
                 viewHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(MainActivity.this, MyProfileActivity.class);
+                        Intent cardonClick = new Intent(MyProfileActivity.this, ProfileActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
-                        cardonClick.putExtra("uid_key", uid_key );
                         startActivity(cardonClick);
                     }
                 });
@@ -725,10 +726,14 @@ public class MainActivity extends AppCompatActivity
                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
                         mFirstRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
-
+                        mSecondRowVoteBtn.setVisibility(View.GONE);
+                        mThirdRowVoteBtn.setVisibility(View.GONE);
+                        mFourthRowVoteBtn.setVisibility(View.GONE);
                     } else {
                         mFirstRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
-
+                        mSecondRowVoteBtn.setVisibility(View.VISIBLE);
+                        mThirdRowVoteBtn.setVisibility(View.VISIBLE);
+                        mFourthRowVoteBtn.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -750,10 +755,14 @@ public class MainActivity extends AppCompatActivity
                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
                         mSecondRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
-
+                        mFirstRowVoteBtn.setVisibility(View.GONE);
+                        mThirdRowVoteBtn.setVisibility(View.GONE);
+                        mFourthRowVoteBtn.setVisibility(View.GONE);
                     } else {
                         mSecondRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
-
+                        mFirstRowVoteBtn.setVisibility(View.VISIBLE);
+                        mThirdRowVoteBtn.setVisibility(View.VISIBLE);
+                        mFourthRowVoteBtn.setVisibility(View.VISIBLE);
 
                     }
 
@@ -776,11 +785,15 @@ public class MainActivity extends AppCompatActivity
                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
                         mThirdRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
-
+                        mFirstRowVoteBtn.setVisibility(View.GONE);
+                        mSecondRowVoteBtn.setVisibility(View.GONE);
+                        mFourthRowVoteBtn.setVisibility(View.GONE);
 
                     } else {
                         mThirdRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
-
+                        mFirstRowVoteBtn.setVisibility(View.VISIBLE);
+                        mSecondRowVoteBtn.setVisibility(View.VISIBLE);
+                        mFourthRowVoteBtn.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -973,49 +986,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch (item.getItemId()) {
 
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_profile) {
-
-            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-            intent.putExtra("heartraise_id", post_key );
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_gallery) {
-
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
 
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }

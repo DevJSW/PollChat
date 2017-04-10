@@ -141,15 +141,37 @@
                     android:text="0"
                     android:id="@+id/first_row_votecounter" />
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="20dp"
-                    android:scaleType="fitXY"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_vote_blue"
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_alignParentRight="true"
-                    android:id="@+id/first_row_voteBtn" />
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:background="#00ffffff"
+                        android:src="@drawable/ic_vote_grey"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top" />
+
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_vote_blue"
+                        android:background="#00ffffff"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top"
+                        android:id="@+id/first_row_voteBtn" />
+                </RelativeLayout>
+
 
             </RelativeLayout>
 
@@ -202,15 +224,36 @@
                     android:text="0"
                     android:id="@+id/second_row_votecounter" />
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="20dp"
-                    android:scaleType="fitXY"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_vote_blue"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_alignParentRight="true"
-                    android:id="@+id/second_row_voteBtn" />
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:background="#00ffffff"
+                        android:src="@drawable/ic_vote_grey"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top" />
+
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_vote_blue"
+                        android:background="#00ffffff"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top"
+                        android:id="@+id/second_row_voteBtn" />
+                </RelativeLayout>
+
 
             </RelativeLayout>
 
@@ -263,15 +306,36 @@
                     android:text="0"
                     android:id="@+id/third_row_votecounter" />
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="20dp"
-                    android:scaleType="fitXY"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_vote_blue"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_alignParentRight="true"
-                    android:id="@+id/third_row_voteBtn" />
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:background="#00ffffff"
+                        android:src="@drawable/ic_vote_grey"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top" />
+
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_vote_blue"
+                        android:background="#00ffffff"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top"
+                        android:id="@+id/third_row_voteBtn" />
+                </RelativeLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -325,15 +389,36 @@
                     android:text="0"
                     android:id="@+id/fourth_row_votecounter" />
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="20dp"
-                    android:scaleType="fitXY"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_vote_blue"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_alignParentRight="true"
-                    android:id="@+id/fourth_row_voteBtn" />
+                    android:layout_marginRight="10dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:background="#00ffffff"
+                        android:src="@drawable/ic_vote_grey"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top" />
+
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_vote_blue"
+                        android:background="#00ffffff"
+                        android:padding="2dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="top"
+                        android:id="@+id/fourth_row_voteBtn" />
+                </RelativeLayout>
+
 
                 <View
                     android:layout_width="match_parent"
