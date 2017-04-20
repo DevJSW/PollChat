@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     SwipeRefreshLayout mSwipeRefreshLayout;
     private ImageView mCallBtn, mImg;
     private DatabaseReference mDatabaseUsers;
-    private DatabaseReference mDatabaseComment, mDatabaseFollowing;
+    private DatabaseReference mDatabaseComment, mDatabaseFollowing, mDatabaseFollowers;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabasePolls;
     private ProgressBar mProgressBar;
@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabasePolls = FirebaseDatabase.getInstance().getReference().child("Polls");
         mDatabaseFollowing = FirebaseDatabase.getInstance().getReference().child("Following");
+        mDatabaseFollowers = FirebaseDatabase.getInstance().getReference().child("Followers");
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Comments");
         mDatabaseTotalVotes = FirebaseDatabase.getInstance().getReference().child("Total_Votes");
         mDatabaseVotesForFirstRow = FirebaseDatabase.getInstance().getReference().child("First_row_votes");
@@ -138,7 +139,8 @@ public class MainActivity extends AppCompatActivity
         mDatabaseVotesForFourthRow.keepSynced(true);
 
         // show polls from ppl i'm following
-        mQueryFollowing = mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).orderByChild("following_post_key").equalTo(post_key);
+
+        //mQueryFollowing = mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).orderByChild("following_post_key").equalTo(post_key);
 
         mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -276,6 +278,10 @@ public class MainActivity extends AppCompatActivity
                 viewHolder.setSecondRowVoteBtn(post_key);
                 viewHolder.setThirdRowVoteBtn(post_key);
                 viewHolder.setFourthRowVoteBtn(post_key);
+
+                // check if user has voted or not to change the color of the voting button
+
+
 
                 mDatabaseTotalVotes.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -718,6 +724,7 @@ public class MainActivity extends AppCompatActivity
 
                         mFirstRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
 
+
                     } else {
                         mFirstRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
 
@@ -742,6 +749,7 @@ public class MainActivity extends AppCompatActivity
                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
                         mSecondRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
+
 
                     } else {
                         mSecondRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
@@ -770,6 +778,7 @@ public class MainActivity extends AppCompatActivity
                         mThirdRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
 
 
+
                     } else {
                         mThirdRowVoteBtn.setImageResource(R.drawable.ic_vote_blue);
 
@@ -794,6 +803,7 @@ public class MainActivity extends AppCompatActivity
                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
                         mFourthRowVoteBtn.setImageResource(R.drawable.ic_vote_red);
+
 
                     } else {
 

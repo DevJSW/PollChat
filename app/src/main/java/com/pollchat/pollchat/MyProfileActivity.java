@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -57,7 +56,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Query mQueryComments;
     private Query mQueryPolls;
-    private Query mQueryResult;
+    private Query mQueryFollowing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +103,6 @@ public class MyProfileActivity extends AppCompatActivity {
         mPollsList = (RecyclerView) findViewById(R.id.polls_list);
         mPollsList.setLayoutManager(new LinearLayoutManager(this));
         mPollsList.setHasFixedSize(true);
-
         mDatabasePolls.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
         mDatabaseTotalVotes.keepSynced(true);
@@ -112,8 +110,6 @@ public class MyProfileActivity extends AppCompatActivity {
         mDatabaseVotesForSecondRow.keepSynced(true);
         mDatabaseVotesForThirdRow.keepSynced(true);
         mDatabaseVotesForFourthRow.keepSynced(true);
-
-
 
         mFollow = (Button) findViewById(R.id.followBtn);
         mFollow.setOnClickListener(new View.OnClickListener() {
@@ -128,10 +124,12 @@ public class MyProfileActivity extends AppCompatActivity {
 
                         if (mProcessFollow) {
 
-                            if (!dataSnapshot.child(mPostKey).hasChild(mAuth.getCurrentUser().getUid())) {
+                            if (dataSnapshot.child(uid_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
-                                mDatabaseFollowers.child(mPostKey).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).child(mPostKey).setValue(mAuth.getCurrentUser().getUid());
+                                mDatabaseFollowers.child(uid_key).setValue(mAuth.getCurrentUser().getUid());
+                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).setValue(uid_key);
+                                mFollow.setVisibility(View.GONE);
+                                mUnfollow.setVisibility(View.VISIBLE);
                                 mProcessFollow = false;
 
                             }
@@ -148,8 +146,42 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        mUnfollow = (Button) findViewById(R.id.unfollowBtn);
+        mFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mProcessFollow = true;
+
+                mDatabaseFollowers.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (mProcessFollow) {
+                            if (dataSnapshot.child(uid_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                mDatabaseFollowers.child(uid_key).removeValue();
+                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mUnfollow.setVisibility(View.GONE);
+                                mFollow.setVisibility(View.VISIBLE);
+                                mProcessFollow = false;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+        });
+
         // COUNT NUMBER OF FOLLOWERS
-/*        mDatabaseFollowers.child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseFollowers.child(uid_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mFollowersCount.setText(dataSnapshot.getChildrenCount() + "");
@@ -162,9 +194,11 @@ public class MyProfileActivity extends AppCompatActivity {
         });
 
         // COUNT NUMBER OF PPL I'M FOLLOWING
-        mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mQueryFollowing = mDatabaseFollowers.child(uid_key).orderByChild(mAuth.getCurrentUser().getUid());
+        mQueryFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 mFollowingCount.setText(dataSnapshot.getChildrenCount() + "");
             }
 
@@ -175,17 +209,6 @@ public class MyProfileActivity extends AppCompatActivity {
         });
 
 
-
-        mUnfollow = (Button) findViewById(R.id.unfollowBtn);
-        mUnfollow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-
-        });
-*/
         // extracting current user information from there poll
         mDatabasePolls.child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
@@ -278,7 +301,7 @@ public class MyProfileActivity extends AppCompatActivity {
                     }
                 });
 
-                // extractining uid on poll post
+                // Extractining uid on poll post
                 mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -541,7 +564,7 @@ public class MyProfileActivity extends AppCompatActivity {
                     }
                 });
 
-                    // count total # of comments and display on post
+                    // Count total # of comments and display on post
                         mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(post_key);
                         mQueryComments.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -638,11 +661,9 @@ public class MyProfileActivity extends AppCompatActivity {
         View mView;
 
         ImageView mChatBtn, mFirstRowVoteBtn, mSecondRowVoteBtn, mThirdRowVoteBtn,  mFourthRowVoteBtn;
-        ImageButton mUserImg;
         DatabaseReference mDatabaseTotalVotes,mDatabaseVotesForFirstRow, mDatabaseVotesForSecondRow, mDatabaseVotesForThirdRow, mDatabaseVotesForFourthRow;
         FirebaseAuth mAuth;
         TextView mCommentCount, mTotalVoteCounter, first_row_votecounter, second_row_votecounter, third_row_votecounter, fourth_row_votecounter, total_vote_count;
-        DatabaseReference mDatabase;
         CircleImageView mCIV;
         ProgressBar mProgressBar;
 
@@ -670,7 +691,6 @@ public class MyProfileActivity extends AppCompatActivity {
             fourth_row_votecounter = (TextView) mView.findViewById(R.id.fourth_row_votecounter);
             mChatBtn = (ImageView) mView.findViewById(R.id.chatBtn);
             mCIV = (CircleImageView) mView.findViewById(R.id.post_image);
-            //mUserImg = (ImageButton) mView.findViewById(R.id.post_image);
             mFirstRowVoteBtn = (ImageView) mView.findViewById(R.id.first_row_voteBtn);
             mSecondRowVoteBtn = (ImageView) mView.findViewById(R.id.second_row_voteBtn);
             mThirdRowVoteBtn = (ImageView) mView.findViewById(R.id.third_row_voteBtn);

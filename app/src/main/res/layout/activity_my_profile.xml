@@ -19,13 +19,11 @@
             android:id="@+id/linearLayout"
             android:orientation="vertical">
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:id="@+id/imageRelative"
                 android:orientation="horizontal">
-
 
                 <RelativeLayout
                     android:layout_width="70dp"
@@ -34,8 +32,6 @@
                     android:layout_centerHorizontal="true"
                     android:layout_above="@+id/subscribeBtn"
                     android:orientation="vertical">
-
-
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:layout_width="match_parent"
@@ -47,10 +43,6 @@
                         android:background="#00ffffff" />
 
                 </RelativeLayout>
-
-
-
-
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -103,7 +95,6 @@
                         android:scaleType="fitXY"
                         android:layout_gravity="top"
                         android:id="@+id/unfollowBtn" />
-
 
                     <Button
                         android:layout_width="130dp"
