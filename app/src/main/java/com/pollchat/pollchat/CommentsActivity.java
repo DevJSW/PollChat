@@ -321,9 +321,8 @@ public class CommentsActivity extends AppCompatActivity {
 
         View mView;
 
-        ImageView mCardPhoto, mImage, mConnectIcon;
+        ImageView mCardPhoto, mImage;
         TextView mCommentCount;
-        RelativeLayout rely;
         LinearLayout liny;
         ProgressBar mProgressBar;
 
@@ -334,7 +333,6 @@ public class CommentsActivity extends AppCompatActivity {
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
-            rely = (RelativeLayout) mView.findViewById(R.id.rely);
 
             mCommentCount = (TextView) mView.findViewById(R.id.commentCount);
 
@@ -345,8 +343,6 @@ public class CommentsActivity extends AppCompatActivity {
             TextView post_message = (TextView) mView.findViewById(R.id.post_message);
             post_message.setText(message);
 
-            TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
-            post_message2.setText(message);
 
         }
 
@@ -364,8 +360,7 @@ public class CommentsActivity extends AppCompatActivity {
             TextView post_date = (TextView) mView.findViewById(R.id.post_date);
             post_date.setText(date);
 
-            TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
-            post_date2.setText(date);
+
         }
 
         public void setImage(final Context ctx, final String image) {
@@ -387,24 +382,7 @@ public class CommentsActivity extends AppCompatActivity {
                             Picasso.with(ctx).load(image).into(post_image);
                         }
                     });
-            final ImageView post_image2 = (ImageView) mView.findViewById(R.id.post_image2);
 
-            Picasso.with(ctx)
-                    .load(image)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_image, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-
-
-                            Picasso.with(ctx).load(image).into(post_image2);
-                        }
-                    });
         }
 
         public void setPhoto(final Context ctx, final String photo) {

@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void populateViewHolder(final LetterViewHolder viewHolder, final Poll model, int position) {
 
-                post_key = getRef(position).getKey();
+                final String post_key = getRef(position).getKey();
 
                 viewHolder.setPoll_question(model.getPoll_question());
                 viewHolder.setFirst_row_username(model.getFirst_row_username());
@@ -624,7 +624,7 @@ public class MainActivity extends AppCompatActivity
                 mDatabaseTotalVotes.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        viewHolder.total_vote_count.setText(dataSnapshot.getChildrenCount() + "");
+                        viewHolder.mTotalVoteCounter.setText(dataSnapshot.getChildrenCount() + "");
                     }
 
                     @Override
