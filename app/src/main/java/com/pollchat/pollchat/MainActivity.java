@@ -532,8 +532,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-
-
+                // open comments activity
                 viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -544,6 +543,7 @@ public class MainActivity extends AppCompatActivity
                 });
 
 
+                //open profile page through post user image
                 viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -554,6 +554,7 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
+                // count total # of comments and display on post
                 mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(post_key);
                 mQueryComments.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -679,7 +680,6 @@ public class MainActivity extends AppCompatActivity
             second_row_votecounter = (TextView) mView.findViewById(R.id.second_row_votecounter);
             third_row_votecounter = (TextView) mView.findViewById(R.id.third_row_votecounter);
             fourth_row_votecounter = (TextView) mView.findViewById(R.id.fourth_row_votecounter);
-            total_vote_count = (TextView) mView.findViewById(R.id.total_vote_count);
             mChatBtn = (ImageView) mView.findViewById(R.id.chatBtn);
             mCIV = (CircleImageView) mView.findViewById(R.id.post_image);
             //mUserImg = (ImageButton) mView.findViewById(R.id.post_image);

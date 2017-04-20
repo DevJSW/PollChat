@@ -489,7 +489,7 @@
                     <ImageView
                         android:layout_width="15dp"
                         android:layout_height="15dp"
-                        android:src="@drawable/ic_share_white"
+                        android:src="@drawable/ic_share"
                         android:layout_marginTop="1dp"
                         android:scaleType="fitXY"
                         android:id="@+id/shareBtn"
@@ -499,14 +499,13 @@
                         android:layout_width="17dp"
                         android:layout_height="17dp"
                         android:id="@+id/likeCount"
-                        android:textColor="#ffffff"
                         android:paddingLeft="7dp"
                         android:text="0"/>
 
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@drawable/ic_voters_white"
+                        android:src="@drawable/ic_voters"
                         android:paddingTop="1dp"
                         android:id="@+id/buttonCall"
                         android:scaleType="fitXY"
@@ -515,7 +514,6 @@
                     <TextView
                         android:layout_width="17dp"
                         android:layout_height="17dp"
-                        android:textColor="#ffffff"
                         android:id="@+id/commentCount"
                         android:paddingLeft="7dp"
                         android:text="0"/>
@@ -524,7 +522,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:id="@+id/chatBtn"
-                        android:src="@drawable/ic_chat_white"
+                        android:src="@drawable/ic_chat"
                         android:scaleType="fitXY"/>
 
 
