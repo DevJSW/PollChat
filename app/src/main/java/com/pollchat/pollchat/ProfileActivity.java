@@ -30,12 +30,15 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileActivity extends AppCompatActivity {
 
     String user_uid = null;
     String user_id = null;
     private Button mEdit;
     private ImageButton mFollow, mUnfollow;
+    private CircleImageView mCIV;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private Boolean mProcessVote = false;
     private DatabaseReference mDatabaseTotalVotes, mDatabasePostKey;
@@ -78,11 +81,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        mUserImg = (ImageView) findViewById(R.id.post_image);
         mFollowersCount = (TextView) findViewById(R.id.followersCount);
         mFollowingCount = (TextView) findViewById(R.id.followingCount);
         mPollsCount = (TextView) findViewById(R.id.pollsCount);
         mUsername = (TextView) findViewById(R.id.post_name);
+        mCIV = (CircleImageView) findViewById(R.id.post_image);
 
         // will have the list of ppl who are following me
         mDatabaseFollowers = FirebaseDatabase.getInstance().getReference().child("Followers");
@@ -205,34 +208,10 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mProcessFollow = true;
-
-                mDatabaseFollowers.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        if (mProcessFollow) {
-
-                            if (dataSnapshot.child(mPostKey).hasChild(mAuth.getCurrentUser().getUid())) {
-
-                                mDatabaseFollowers.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).child(mPostKey).removeValue();
-                                mProcessFollow = false;
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
             }
 
         });
-
 
 
                 mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
@@ -243,7 +222,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                         mUsername.setText(post_name);
 
-                        Picasso.with(ProfileActivity.this).load(post_image).into(mUserImg);
+                        Picasso.with(ProfileActivity.this).load(post_image).into(mCIV);
                     }
 
                     @Override
@@ -264,13 +243,6 @@ public class ProfileActivity extends AppCompatActivity {
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {
 
-               if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
-
-                   mFollow.setVisibility(View.GONE);
-
-               } else {
-                   mFollow.setVisibility(View.VISIBLE);
-               }
            }
 
            @Override
@@ -870,9 +842,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         public void setImage(final Context ctx, final String image) {
-            final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
+            //final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
+            final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
 
-            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
+            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
                 @Override
                 public void onSuccess() {
 
@@ -882,7 +855,7 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onError() {
 
 
-                    Picasso.with(ctx).load(image).into(post_image);
+                    Picasso.with(ctx).load(image).into(civ);
                 }
             });
         }

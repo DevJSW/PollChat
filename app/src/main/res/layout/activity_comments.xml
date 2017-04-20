@@ -3,11 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.pollchat.pollchat.CommentsActivity">
+
+    <include layout="@layout/toolbar_chatroom"
+        android:id="@+id/mCustomToolbarChat"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/mCustomToolbarChat"
         android:layout_above="@+id/EditField"
         android:orientation="vertical">
 
@@ -30,19 +35,14 @@
 
     </LinearLayout>
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="67dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:id="@+id/EditField"
-        android:layout_marginBottom="2dp">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#565252"
-            android:layout_above="@+id/commentField_"/>
+        android:layout_marginBottom="5dp">
 
 
 
@@ -50,60 +50,74 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/commentField_"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="6dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/commentBtn"
-            android:layout_toStartOf="@+id/commentBtn"
-            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@+id/sendBtn"
+            android:layout_toStartOf="@+id/sendBtn"
+            android:layout_marginLeft="3dp"
             android:paddingLeft="5dp"
             android:textSize="15dp">
 
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:hint="Type comment..."
+                android:layout_height="45dp"
+                android:hint="Type a message..."
                 android:id="@+id/commentField"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="6dp"
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="1dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-
+                android:paddingRight="24dp"
+                android:background="@drawable/bg_send_bubble"
                 android:paddingLeft="5dp"
                 android:textSize="15dp" />
+
 
         </android.support.design.widget.TextInputLayout>
 
         <ImageButton
-            android:layout_width="60dp"
-            android:layout_height="43dp"
-            android:id="@+id/commentBtn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:id="@+id/sendBtn"
             android:adjustViewBounds="true"
             android:background="#00ffffff"
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_sender"
+            android:layout_marginRight="10dp" />
 
-            android:paddingTop="3dp"
-            android:paddingBottom="8dp" />
+
 
 
     </RelativeLayout>
 
-    <TextView
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No comments."
-        android:textSize="15dp"
+        android:layout_centerInParent="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_margin="30dp"
-        android:id="@+id/noPostTxt"
-        android:textColor="@color/colorPrimary"/>
+        android:padding="15dp"
+        android:id="@+id/hello">
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Comments"
+            android:id="@+id/post_name"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/post_image"/>
+
+
+    </RelativeLayout>
 
 </RelativeLayout>

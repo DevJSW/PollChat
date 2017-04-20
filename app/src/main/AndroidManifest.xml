@@ -40,7 +40,8 @@
             android:label="Create PollChat" />
         <activity
             android:name=".CommentsActivity"
-            android:label="Comments" />
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".OpenPhotoOnPollActivity"
             android:label="" />
@@ -52,7 +53,15 @@
             android:label="Profile" />
         <activity
             android:name=".DiscoverPeopleActivity"
-            android:label="Discover People"/>
+            android:label="Discover People" />
+        <activity
+            android:name=".SendPhotoActivity"
+            android:label="Send photo"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".OpenPhotoActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:label=""/>
     </application>
 
 </manifest>

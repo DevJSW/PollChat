@@ -1,6 +1,5 @@
 package com.pollchat.pollchat;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,18 +9,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +37,8 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class CommentsActivity extends AppCompatActivity {
 
     private String mPostKey = null;
@@ -47,20 +49,19 @@ public class CommentsActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabaseComment;
     private DatabaseReference mDatabaseUser;
-    private DatabaseReference mDatabasePostComments;
-    private Query mQueryPostComment;
+    private DatabaseReference mDatabaseUser2;
+    private DatabaseReference mDatabasePostChats;
+    private Query mQueryPostChats;
     private FirebaseUser mCurrentUser;
     private FirebaseAuth mAuth;
-    private ImageButton mCommentBtn;
-    private ImageView mBtnCapture;
+    private ImageButton mSendBtn;
     private EditText mCommentField;
-    private DatabaseReference mDatabaseCurrentPost;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
     private Menu menu;
     Context context = this;
-
     private Query mQueryComments;
+    private Query mQueryChats;
 
 
     /** Called when the activity is first created. */
@@ -69,10 +70,13 @@ public class CommentsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
+        setSupportActionBar(my_toolbar);
 
-        mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+        //mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+        final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -83,44 +87,59 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Polls");
-        mProgress = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
-        mDatabasePostComments = FirebaseDatabase.getInstance().getReference().child("Comments");
-        mQueryPostComment = mDatabasePostComments.orderByChild("post_key").equalTo(mPostKey);
+        mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Comments");
+        mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
 
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
+        mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Users");
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
         mCommentList.setHasFixedSize(true);
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Comments");
         mDatabaseComment.keepSynced(true);
-        mDatabase.keepSynced(true);
         mDatabaseUser.keepSynced(true);
 
         mCommentField = (EditText) findViewById(R.id.commentField);
-        mCommentBtn = (ImageButton) findViewById(R.id.commentBtn);
-        mCommentBtn.setOnClickListener(new View.OnClickListener() {
+        mSendBtn = (ImageButton) findViewById(R.id.sendBtn);
+        mSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startPosting();
             }
         });
 
+        // toolbar back button
+        ImageView toolbar_back = (ImageView) findViewById(R.id.toolbar_back);
+        toolbar_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommentsActivity.this.finish();
+            }
+        });
 
-        mQueryPostComment.addValueEventListener(new ValueEventListener() {
+        mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue() == null){
 
-                    mNoPostTxt.setVisibility(View.VISIBLE);
-                } else {
-                    mNoPostTxt.setVisibility(View.GONE);
-                }
+                final String userimg = (String) dataSnapshot.child("image").getValue();
+                final String username = (String) dataSnapshot.child("name").getValue();
+                final CircleImageView civ = (CircleImageView) findViewById(R.id.post_image);
+                final TextView name = (TextView) findViewById(R.id.post_name);
+
+                // load image on toolbar
+                CircleImageView userImgToolbar = (CircleImageView) findViewById(R.id.toolbarImg);
+                Picasso.with(CommentsActivity.this).load(userimg).into(userImgToolbar);
+
+                // set username on toolbar
+                TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
+                toolbar_username.setText(username);
+
+
             }
 
             @Override
@@ -129,14 +148,14 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
 
-        mQueryPostComment.addValueEventListener(new ValueEventListener() {
+        mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null){
 
-
+                    hello.setVisibility(View.VISIBLE);
                 } else {
-                    mNoPostTxt.setVisibility(View.GONE);
+                    hello.setVisibility(View.GONE);
                 }
             }
 
@@ -148,7 +167,6 @@ public class CommentsActivity extends AppCompatActivity {
 
 
         mDatabaseComment.keepSynced(true);
-        mDatabase.keepSynced(true);
 
 
     }
@@ -171,28 +189,51 @@ public class CommentsActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-
     private void startPosting() {
-        mProgress.setMessage("Posting...");
+        // mProgress.setMessage("Posting...");
 
         Date date = new Date();
         final String stringDate = DateFormat.getDateTimeInstance().format(date);
 
-        final String comment_val = mCommentField.getText().toString().trim();
-        if (!TextUtils.isEmpty(comment_val)) {
+        final String message_val = mCommentField.getText().toString().trim();
+        if (!TextUtils.isEmpty(message_val)) {
 
-            mProgress.show();
+            //mProgress.show();
 
 
             final DatabaseReference newPost = mDatabaseComment.push();
 
 
-            mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(mPostKey);
-            mQueryComments.addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabaseUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    mDatabase.child(mPostKey).child("comments_val").setValue(dataSnapshot.getChildrenCount() + "");
+                    // getting user uid
+                    final String reciever_uid = (String) dataSnapshot.child("uid").getValue();
+
+                    mDatabaseUser.addValueEventListener(new ValueEventListener() {
+
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            newPost.child("message").setValue(message_val);
+                            newPost.child("uid").setValue(mCurrentUser.getUid());
+                            newPost.child("name").setValue(dataSnapshot.child("name").getValue());
+                            newPost.child("image").setValue(dataSnapshot.child("image").getValue());
+                            newPost.child("sender_uid").setValue(mCurrentUser.getUid());
+                            newPost.child("reciever_uid").setValue(reciever_uid);
+                            newPost.child("date").setValue(stringDate);
+                            newPost.child("post_key").setValue(mPostKey);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
 
                 @Override
@@ -201,67 +242,36 @@ public class CommentsActivity extends AppCompatActivity {
                 }
             });
 
-
-            mDatabaseUser.addValueEventListener(new ValueEventListener() {
-
-
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    newPost.child("comment").setValue(comment_val);
-                    newPost.child("uid").setValue(mCurrentUser.getUid());
-                    newPost.child("name").setValue(dataSnapshot.child("name").getValue());
-                    newPost.child("image").setValue(dataSnapshot.child("image").getValue());
-                    newPost.child("time").setValue(stringDate);
-                    newPost.child("post_key").setValue(mPostKey);
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(CommentsActivity.this);
-            builder.setTitle("Post Alert!");
-            builder.setMessage("Your comment has been posted SUCCESSFULLY!")
-                    .setCancelable(true)
-                    .setPositiveButton("OK",null);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            mProgress.dismiss();
+            // mProgress.dismiss();
 
         }
 
     }
-
     @Override
     protected void onStart() {
         super.onStart();
 
-        FirebaseRecyclerAdapter<Comment, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Comment, CommentViewHolder>(
+        FirebaseRecyclerAdapter<Chat, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chat, CommentViewHolder>(
 
-                Comment.class,
-                R.layout.comments_row,
+                Chat.class,
+                R.layout.chat_row,
                 CommentViewHolder.class,
-                mQueryPostComment
+                mQueryPostChats
 
 
         ) {
             @Override
-            protected void populateViewHolder(final CommentViewHolder viewHolder, final Comment model, int position) {
+            protected void populateViewHolder(final CommentViewHolder viewHolder, final Chat model, int position) {
 
                 final String post_key = getRef(position).getKey();
 
-                viewHolder.setComment(model.getComment());
-                viewHolder.setTime(model.getTime());
+                viewHolder.setMessage(model.getMessage());
+                viewHolder.setDate(model.getDate());
+                viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
-                viewHolder.setUsername(model.getName());
 
-                mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
+
+                mDatabasePostChats.child(post_key).addValueEventListener(new ValueEventListener() {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -271,10 +281,7 @@ public class CommentsActivity extends AppCompatActivity {
                         if (post_photo != null) {
 
                             viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-
                             viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
-                            viewHolder.mProgressBar.setVisibility(View.VISIBLE);
-                            viewHolder.mInside.setVisibility(View.VISIBLE);
 
                         } else {
 
@@ -295,7 +302,7 @@ public class CommentsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        Intent cardonClick = new Intent(CommentsActivity.this, OpenPhotoOnPollActivity.class);
+                        Intent cardonClick = new Intent(CommentsActivity.this, OpenPhotoActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
                         startActivity(cardonClick);
 
@@ -314,9 +321,10 @@ public class CommentsActivity extends AppCompatActivity {
 
         View mView;
 
-        DatabaseReference mDatabase;
-        ImageView mCardPhoto, mInside, mImage, mAnonymous;
-        TextView  mAnonymousText;
+        ImageView mCardPhoto, mImage, mConnectIcon;
+        TextView mCommentCount;
+        RelativeLayout rely;
+        LinearLayout liny;
         ProgressBar mProgressBar;
 
         public CommentViewHolder(View itemView) {
@@ -324,30 +332,40 @@ public class CommentsActivity extends AppCompatActivity {
             mView = itemView;
 
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
-            mInside = (ImageView) mView.findViewById(R.id.inside_view2);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
+            liny = (LinearLayout) mView.findViewById(R.id.liny);
+            rely = (RelativeLayout) mView.findViewById(R.id.rely);
 
-            mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
-
-        }
-
-        public void setComment(String comment) {
-
-            TextView post_comment = (TextView) mView.findViewById(R.id.post_comment);
-            post_comment.setText(comment);
+            mCommentCount = (TextView) mView.findViewById(R.id.commentCount);
 
         }
 
-        public void setUsername(String username) {
+        public void setMessage(String message) {
 
-            TextView post_username = (TextView) mView.findViewById(R.id.post_username);
-            post_username.setText(username);
+            TextView post_message = (TextView) mView.findViewById(R.id.post_message);
+            post_message.setText(message);
+
+            TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
+            post_message2.setText(message);
+
         }
 
-        public void setTime(String time) {
+        public void setName(String name) {
 
-            RelativeTimeTextView v = (RelativeTimeTextView)mView.findViewById(R.id.timestamp);
-            v.setText(time);
+            TextView post_name = (TextView) mView.findViewById(R.id.post_name);
+            post_name.setText(name);
+
+
+        }
+
+
+        public void setDate(String date) {
+
+            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
+            post_date.setText(date);
+
+            TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
+            post_date2.setText(date);
         }
 
         public void setImage(final Context ctx, final String image) {
@@ -367,6 +385,24 @@ public class CommentsActivity extends AppCompatActivity {
 
 
                             Picasso.with(ctx).load(image).into(post_image);
+                        }
+                    });
+            final ImageView post_image2 = (ImageView) mView.findViewById(R.id.post_image2);
+
+            Picasso.with(ctx)
+                    .load(image)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(post_image, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+
+                            Picasso.with(ctx).load(image).into(post_image2);
                         }
                     });
         }
@@ -390,34 +426,11 @@ public class CommentsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.comment_menu, menu);
-        this.menu = menu;
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                this.finish();
-                return true;
-            default:
-                if (id == R.id.action_settings) {
-
-                   // Intent cardonClick = new Intent(CommentsActivity.this, SendPhotoActivity.class);
-                   // cardonClick.putExtra("heartraise_id", mPostKey );
-                   // startActivity(cardonClick);
-                }
-
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 }
+
+
+
+
+

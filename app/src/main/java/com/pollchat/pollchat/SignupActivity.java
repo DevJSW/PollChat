@@ -118,8 +118,6 @@ public class SignupActivity extends AppCompatActivity {
                     Date date = new Date();
                     final String stringDate = DateFormat.getDateInstance().format(date);
 
-                    final String user_id = auth.getCurrentUser().getUid();
-
                     if (TextUtils.isEmpty(name)) {
                         Toast.makeText(getApplicationContext(), "Enter name!", Toast.LENGTH_SHORT).show();
 
@@ -164,6 +162,7 @@ public class SignupActivity extends AppCompatActivity {
                                         } else {
 
                                             mprogress.setMessage("Saving, please wait...");
+                                            mprogress.setCancelable(false);
                                             mprogress.show();
 
                                             StorageReference filepath = mStorage.child("Profile_images").child(mImageUri.getLastPathSegment());
@@ -177,10 +176,10 @@ public class SignupActivity extends AppCompatActivity {
 
                                                     final DatabaseReference newPost = mDatabaseUsers;
 
-                                                    newPost.child(user_id).child("name").setValue(name);
-                                                    newPost.child(user_id).child("image").setValue(downloadUrl.toString());
-                                                    newPost.child(user_id).child("date").setValue(stringDate);
-                                                    newPost.child(user_id).child("uid").setValue(user_id);
+                                                    newPost.child(auth.getCurrentUser().getUid()).child("name").setValue(name);
+                                                    newPost.child(auth.getCurrentUser().getUid()).child("image").setValue(downloadUrl.toString());
+                                                    newPost.child(auth.getCurrentUser().getUid()).child("date").setValue(stringDate);
+                                                    newPost.child(auth.getCurrentUser().getUid()).child("uid").setValue(auth.getCurrentUser().getUid());
 
                                                     Intent cardonClick = new Intent(SignupActivity.this, MainActivity.class);
                                                     cardonClick.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

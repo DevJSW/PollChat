@@ -21,6 +21,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DiscoverPeopleActivity extends AppCompatActivity {
 
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -28,7 +30,6 @@ public class DiscoverPeopleActivity extends AppCompatActivity {
     private DatabaseReference mCurrentDatabaseUser;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private ProgressBar mProgressBar;
     private RecyclerView mLettersList;
     private FirebaseUser mCurrentUser;
 
@@ -51,14 +52,12 @@ public class DiscoverPeopleActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar2);
         mLettersList = (RecyclerView) findViewById(R.id.letters_list);
         mLettersList.setLayoutManager(new LinearLayoutManager(this));
         mLettersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
 
-        checkUserExists();
 
     }
 
@@ -79,13 +78,6 @@ public class DiscoverPeopleActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    private void checkUserExists() {
-
-        mProgressBar.setVisibility(View.VISIBLE);
-        final String user_id = mAuth.getCurrentUser().getUid();
-
-
-    }
 
 
     @Override
@@ -150,9 +142,10 @@ public class DiscoverPeopleActivity extends AppCompatActivity {
         }
 
         public void setImage(final Context ctx, final String image) {
-            final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
+            //final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
+            final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
 
-            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
+            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
                 @Override
                 public void onSuccess() {
 
@@ -162,7 +155,7 @@ public class DiscoverPeopleActivity extends AppCompatActivity {
                 public void onError() {
 
 
-                    Picasso.with(ctx).load(image).into(post_image);
+                    Picasso.with(ctx).load(image).into(civ);
                 }
             });
         }

@@ -38,6 +38,8 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -323,17 +325,11 @@ public class MainActivity extends AppCompatActivity
 
                                                     mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                                     mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                                    viewHolder.mSecondRowVoteBtn.setVisibility(View.VISIBLE);
-                                                    viewHolder.mThirdRowVoteBtn.setVisibility(View.VISIBLE);
-                                                    viewHolder.mFourthRowVoteBtn.setVisibility(View.VISIBLE);
                                                     mProcessVote = false;
                                                 }else {
 
                                                     mDatabaseVotesForFirstRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                                                     mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                                    viewHolder.mSecondRowVoteBtn.setVisibility(View.GONE);
-                                                    viewHolder.mThirdRowVoteBtn.setVisibility(View.GONE);
-                                                    viewHolder.mFourthRowVoteBtn.setVisibility(View.GONE);
                                                     mProcessVote = false;
 
                                                 }
@@ -368,17 +364,11 @@ public class MainActivity extends AppCompatActivity
 
                                         mDatabaseVotesForSecondRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                         mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                        viewHolder.mFirstRowVoteBtn.setVisibility(View.VISIBLE);
-                                        viewHolder.mThirdRowVoteBtn.setVisibility(View.VISIBLE);
-                                        viewHolder.mFourthRowVoteBtn.setVisibility(View.VISIBLE);
                                         mProcessVote = false;
                                     }else {
 
                                         mDatabaseVotesForSecondRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                                         mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                        viewHolder.mFirstRowVoteBtn.setVisibility(View.GONE);
-                                        viewHolder.mThirdRowVoteBtn.setVisibility(View.GONE);
-                                        viewHolder.mFourthRowVoteBtn.setVisibility(View.GONE);
                                         mProcessVote = false;
 
                                     }
@@ -414,17 +404,11 @@ public class MainActivity extends AppCompatActivity
 
                                         mDatabaseVotesForThirdRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                         mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                        viewHolder.mFirstRowVoteBtn.setVisibility(View.VISIBLE);
-                                        viewHolder.mSecondRowVoteBtn.setVisibility(View.VISIBLE);
-                                        viewHolder.mFourthRowVoteBtn.setVisibility(View.VISIBLE);
                                         mProcessVote = false;
                                     }else {
 
                                         mDatabaseVotesForThirdRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                                         mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                        viewHolder.mFirstRowVoteBtn.setVisibility(View.GONE);
-                                        viewHolder.mSecondRowVoteBtn.setVisibility(View.GONE);
-                                        viewHolder.mFourthRowVoteBtn.setVisibility(View.GONE);
                                         mProcessVote = false;
 
                                     }
@@ -459,17 +443,11 @@ public class MainActivity extends AppCompatActivity
 
                                         mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                         mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                        viewHolder.mFirstRowVoteBtn.setVisibility(View.VISIBLE);
-                                        viewHolder.mSecondRowVoteBtn.setVisibility(View.VISIBLE);
-                                        viewHolder.mThirdRowVoteBtn.setVisibility(View.VISIBLE);
                                         mProcessVote = false;
                                     }else {
 
                                         mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                                         mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                        viewHolder.mFirstRowVoteBtn.setVisibility(View.GONE);
-                                        viewHolder.mSecondRowVoteBtn.setVisibility(View.GONE);
-                                        viewHolder.mThirdRowVoteBtn.setVisibility(View.GONE);
                                         mProcessVote = false;
 
                                     }
@@ -497,17 +475,11 @@ public class MainActivity extends AppCompatActivity
 
                                 mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                 mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                viewHolder.mFirstRowVoteBtn.setVisibility(View.VISIBLE);
-                                viewHolder.mSecondRowVoteBtn.setVisibility(View.VISIBLE);
-                                viewHolder.mThirdRowVoteBtn.setVisibility(View.VISIBLE);
                                 mProcessVote = false;
                             }else {
 
                                 mDatabaseVotesForFourthRow.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                                 mDatabaseTotalVotes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                viewHolder.mFirstRowVoteBtn.setVisibility(View.GONE);
-                                viewHolder.mSecondRowVoteBtn.setVisibility(View.GONE);
-                                viewHolder.mThirdRowVoteBtn.setVisibility(View.GONE);
                                 mProcessVote = false;
 
                             }
@@ -571,7 +543,8 @@ public class MainActivity extends AppCompatActivity
                     }
                 });
 
-                viewHolder.mUserImg.setOnClickListener(new View.OnClickListener() {
+
+                viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent cardonClick = new Intent(MainActivity.this, MyProfileActivity.class);
@@ -681,6 +654,7 @@ public class MainActivity extends AppCompatActivity
         FirebaseAuth mAuth;
         TextView mCommentCount, mTotalVoteCounter, first_row_votecounter, second_row_votecounter, third_row_votecounter, fourth_row_votecounter, total_vote_count;
         DatabaseReference mDatabase;
+        CircleImageView mCIV;
         ProgressBar mProgressBar;
 
         public LetterViewHolder(View itemView) {
@@ -707,7 +681,8 @@ public class MainActivity extends AppCompatActivity
             fourth_row_votecounter = (TextView) mView.findViewById(R.id.fourth_row_votecounter);
             total_vote_count = (TextView) mView.findViewById(R.id.total_vote_count);
             mChatBtn = (ImageView) mView.findViewById(R.id.chatBtn);
-            mUserImg = (ImageButton) mView.findViewById(R.id.post_image);
+            mCIV = (CircleImageView) mView.findViewById(R.id.post_image);
+            //mUserImg = (ImageButton) mView.findViewById(R.id.post_image);
             mFirstRowVoteBtn = (ImageView) mView.findViewById(R.id.first_row_voteBtn);
             mSecondRowVoteBtn = (ImageView) mView.findViewById(R.id.second_row_voteBtn);
             mThirdRowVoteBtn = (ImageView) mView.findViewById(R.id.third_row_voteBtn);
@@ -862,9 +837,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         public void setImage(final Context ctx, final String image) {
-            final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
+            //final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
+            final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
 
-            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
+            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
                 @Override
                 public void onSuccess() {
 
@@ -874,7 +850,7 @@ public class MainActivity extends AppCompatActivity
                 public void onError() {
 
 
-                    Picasso.with(ctx).load(image).into(post_image);
+                    Picasso.with(ctx).load(image).into(civ);
                 }
             });
         }
