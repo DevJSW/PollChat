@@ -34,10 +34,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MyProfileActivity extends AppCompatActivity {
 
-    String user_uid = null;
+    String uid_key = null;
     String user_id = null;
-    private Button mEdit;
-    private ImageButton mFollow, mUnfollow;
+    private Button mFollow, mUnfollow;
     private CircleImageView mCIV;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private Boolean mProcessVote = false;
@@ -63,21 +62,11 @@ public class MyProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_my_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPostKey = getIntent().getExtras().getString("heartraise_id");
-        user_uid = getIntent().getExtras().getString("uid_id");
-
-        mEdit = (Button) findViewById(R.id.editBtn);
-        mEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyProfileActivity.this, EditActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        uid_key = getIntent().getExtras().getString("poll_uid");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -126,7 +115,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
 
 
-        mFollow = (ImageButton) findViewById(R.id.followBtn);
+        mFollow = (Button) findViewById(R.id.followBtn);
         mFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,11 +173,41 @@ public class MyProfileActivity extends AppCompatActivity {
 
             }
         });
-        */
+
+
+
+        mUnfollow = (Button) findViewById(R.id.unfollowBtn);
+        mUnfollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+
+        });
+*/
+        // extracting current user information from there poll
+        mDatabasePolls.child(mPostKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String post_name = (String) dataSnapshot.child("name").getValue();
+                String post_image = (String) dataSnapshot.child("image").getValue();
+
+                mUsername.setText(post_name);
+
+                Picasso.with(MyProfileActivity.this).load(post_image).into(mCIV);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         // COUNT NUMBER OF POLLS
-        mQueryPolls = mDatabase.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryPolls = mDatabase.orderByChild("uid").equalTo(uid_key);
         mQueryPolls.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -200,38 +219,6 @@ public class MyProfileActivity extends AppCompatActivity {
 
             }
         });
-
-
-        mUnfollow = (ImageButton) findViewById(R.id.unfollowBtn);
-        mUnfollow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-
-        });
-
-
-        mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String post_name = (String) dataSnapshot.child("name").getValue();
-                String post_image = (String) dataSnapshot.child("image").getValue();
-
-                mUsername.setText(post_name);
-
-                Picasso.with(MyProfileActivity.this).load(post_image).into(mCIV);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        // check if i'm a follower
 
     }
 

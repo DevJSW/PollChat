@@ -3,13 +3,12 @@ package com.pollchat.pollchat;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,9 +22,11 @@ import com.google.firebase.storage.UploadTask;
 import java.text.DateFormat;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class EditActivity extends AppCompatActivity {
     private Menu menu;
-    private ImageView mPostUserimg;
+    private CircleImageView mPostUserimg;
     private EditText mPostName;
     private DatabaseReference mDatabaseUsers;
     private StorageReference mStorage;
@@ -48,7 +49,7 @@ public class EditActivity extends AppCompatActivity {
         mPostName = (EditText) findViewById(R.id.post_name);
 
         // set user img when clicked by user from gallery
-        mPostUserimg = (ImageView) findViewById(R.id.post_userimg);
+        mPostUserimg = (CircleImageView) findViewById(R.id.post_userimg);
         mPostUserimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

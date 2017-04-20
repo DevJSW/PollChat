@@ -533,24 +533,41 @@ public class MainActivity extends AppCompatActivity
                 });
 
                 // open comments activity
+
+
                 viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent cardonClick = new Intent(MainActivity.this, CommentsActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
+                        cardonClick.putExtra("poll_uid", uid_key );
                         startActivity(cardonClick);
                     }
                 });
 
 
                 //open profile page through post user image
-                viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
+
+                mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(MainActivity.this, MyProfileActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
-                        cardonClick.putExtra("uid_key", uid_key );
-                        startActivity(cardonClick);
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        String poll_user_uid = (String) dataSnapshot.child("uid").getValue();
+
+                    viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent cardonClick = new Intent(MainActivity.this, MyProfileActivity.class);
+                            cardonClick.putExtra("heartraise_id", post_key );
+                            cardonClick.putExtra("poll_uid", uid_key );
+                            startActivity(cardonClick);
+                        }
+                    });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
 
