@@ -41,7 +41,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CommentsActivity extends AppCompatActivity {
 
-    private String mPostKey = null;
+    String mPostKey = null;
+    String uid_key = null;
     private TextView mNoPostTxt;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressDialog mProgress;
@@ -90,6 +91,7 @@ public class CommentsActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
+        uid_key = getIntent().getExtras().getString("poll_uid");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Comments");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
@@ -122,14 +124,12 @@ public class CommentsActivity extends AppCompatActivity {
             }
         });
 
-        mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
+        mDatabaseUser2.child(uid_key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 final String userimg = (String) dataSnapshot.child("image").getValue();
                 final String username = (String) dataSnapshot.child("name").getValue();
-                final CircleImageView civ = (CircleImageView) findViewById(R.id.post_image);
-                final TextView name = (TextView) findViewById(R.id.post_name);
 
                 // load image on toolbar
                 CircleImageView userImgToolbar = (CircleImageView) findViewById(R.id.toolbarImg);

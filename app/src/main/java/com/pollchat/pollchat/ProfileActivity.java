@@ -530,27 +530,30 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
-                // open comments activity
-                viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
+                mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(ProfileActivity.this, CommentsActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
-                        startActivity(cardonClick);
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String uid_key = (String) dataSnapshot.child("uid").getValue();
+
+                        // open comments activity
+                        viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent cardonClick = new Intent(ProfileActivity.this, CommentsActivity.class);
+                                cardonClick.putExtra("heartraise_id", post_key );
+                                cardonClick.putExtra("poll_uid", uid_key );
+                                startActivity(cardonClick);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
 
-
-                //open profile page through post user image
-                viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(ProfileActivity.this, MyProfileActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
-                        cardonClick.putExtra("uid_key", user_id );
-                        startActivity(cardonClick);
-                    }
-                });
 
                 // count total # of comments and display on post
                 mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(post_key);

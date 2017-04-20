@@ -517,34 +517,22 @@ public class MyProfileActivity extends AppCompatActivity {
                     }
                 });
 
-                // open comments activity
-                viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(MyProfileActivity.this, CommentsActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
-                        startActivity(cardonClick);
-                    }
-                });
-
-
-                //open profile page through post user image
-                viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent cardonClick = new Intent(MyProfileActivity.this, MyProfileActivity.class);
-                        cardonClick.putExtra("heartraise_id", post_key );
-                        cardonClick.putExtra("uid_key", user_id );
-                        startActivity(cardonClick);
-                    }
-                });
-
-                // count total # of comments and display on post
-                mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(post_key);
-                mQueryComments.addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        viewHolder.mCommentCount.setText(dataSnapshot.getChildrenCount() + "");
+
+                        final String uid_key = (String) dataSnapshot.child("uid").getValue();
+
+                        // open comments activity
+                        viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent cardonClick = new Intent(MyProfileActivity.this, CommentsActivity.class);
+                                cardonClick.putExtra("heartraise_id", post_key );
+                                cardonClick.putExtra("poll_uid", uid_key );
+                                startActivity(cardonClick);
+                            }
+                        });
                     }
 
                     @Override
@@ -552,6 +540,21 @@ public class MyProfileActivity extends AppCompatActivity {
 
                     }
                 });
+
+                    // count total # of comments and display on post
+                        mQueryComments = mDatabaseComment.orderByChild("post_key").equalTo(post_key);
+                        mQueryComments.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                viewHolder.mCommentCount.setText(dataSnapshot.getChildrenCount() + "");
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
 
                 // COUNT FIRST ROW VOTES
                 mDatabaseVotesForFirstRow.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {

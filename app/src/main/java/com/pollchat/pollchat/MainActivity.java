@@ -552,17 +552,17 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        String poll_user_uid = (String) dataSnapshot.child("uid").getValue();
+                        final String uid_key = (String) dataSnapshot.child("uid").getValue();
 
-                    viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent cardonClick = new Intent(MainActivity.this, MyProfileActivity.class);
-                            cardonClick.putExtra("heartraise_id", post_key );
-                            cardonClick.putExtra("poll_uid", uid_key );
-                            startActivity(cardonClick);
-                        }
-                    });
+                        viewHolder.mCIV.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent cardonClick = new Intent(MainActivity.this, MyProfileActivity.class);
+                                cardonClick.putExtra("heartraise_id", post_key );
+                                cardonClick.putExtra("poll_uid", uid_key );
+                                startActivity(cardonClick);
+                            }
+                        });
                     }
 
                     @Override
