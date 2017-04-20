@@ -18,14 +18,14 @@
             android:orientation="vertical">
 
 
-            <ImageView
-                android:layout_width="match_parent"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:id="@+id/post_userimg"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/placeholder_image"
-                android:layout_marginBottom="25dp"
-                android:scaleType="fitXY" />
+                android:layout_marginBottom="15dp" />
 
             <TextView
                 android:layout_width="match_parent"

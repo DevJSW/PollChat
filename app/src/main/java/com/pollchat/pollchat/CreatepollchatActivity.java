@@ -170,6 +170,7 @@ public class CreatepollchatActivity extends AppCompatActivity {
     //posting poll data to firebase...
     private void startPosting() {
         mProgress.setMessage("Your PollChat will be LIVE in a few minutes...");
+        mProgress.setCancelable(false);
 
         Date date = new Date();
         final String stringDate = DateFormat.getDateInstance().format(date);
