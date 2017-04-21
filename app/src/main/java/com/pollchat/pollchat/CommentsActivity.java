@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -43,7 +42,6 @@ public class CommentsActivity extends AppCompatActivity {
 
     String mPostKey = null;
     String uid_key = null;
-    private TextView mNoPostTxt;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
@@ -59,13 +57,11 @@ public class CommentsActivity extends AppCompatActivity {
     private EditText mCommentField;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
-    private Menu menu;
     Context context = this;
     private Boolean mProcessLike = false;
     private DatabaseReference mDatabaseLike;
     private Boolean mProcessUnlike = false;
     private DatabaseReference mDatabaseUnlike;
-    private Query mQueryChats;
 
 
     /** Called when the activity is first created. */
@@ -275,6 +271,7 @@ public class CommentsActivity extends AppCompatActivity {
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 viewHolder.setLikeBtn(post_key);
+                viewHolder.setUnlikeBtn(post_key);
 
 
                 mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -308,8 +305,6 @@ public class CommentsActivity extends AppCompatActivity {
                                     }else {
 
                                         mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                        // mDatabaseLike.child(post_key).child("post_key").setValue(mAuth.getCurrentUser().getUid());
-
                                         mProcessLike = false;
 
                                     }
@@ -430,7 +425,7 @@ public class CommentsActivity extends AppCompatActivity {
 
         ImageView mCardPhoto, mImage, mLikeBtn, mUnlikeBtn;
         TextView mCommentCount, mLikeCount, mUnlikeCount;
-        DatabaseReference mDatabaseLike;
+        DatabaseReference mDatabaseLike, mDatabaseUnlike;
         FirebaseAuth mAuth;
         LinearLayout liny;
         ProgressBar mProgressBar;
@@ -441,6 +436,8 @@ public class CommentsActivity extends AppCompatActivity {
 
             mAuth = FirebaseAuth.getInstance();
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            mDatabaseLike.keepSynced(true);
+            mDatabaseUnlike = FirebaseDatabase.getInstance().getReference().child("Unlikes");
             mDatabaseLike.keepSynced(true);
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
@@ -461,9 +458,9 @@ public class CommentsActivity extends AppCompatActivity {
 
                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
-                       // mCall.setImageResource(R.drawable.like_btn_red);
+                        mLikeBtn.setImageResource(R.drawable.ic_thumb_up_red);
                     } else {
-                        //mCall.setImageResource(R.drawable.like_btn_black);
+                        mLikeBtn.setImageResource(R.drawable.ic_thumb_up);
                     }
 
                 }
@@ -475,6 +472,30 @@ public class CommentsActivity extends AppCompatActivity {
             });
 
         }
+
+        public void setUnlikeBtn(final String post_key) {
+
+            mDatabaseUnlike.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mUnlikeBtn.setImageResource(R.drawable.ic_thumb_down_red);
+                    } else {
+                        mUnlikeBtn.setImageResource(R.drawable.ic_thumb_down);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
 
         public void setMessage(String message) {
 

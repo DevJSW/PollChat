@@ -231,7 +231,6 @@ public class ProfileActivity extends AppCompatActivity {
                 });
 
 
-        // check if i'm a follower
 
     }
 
@@ -291,7 +290,7 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
 
-                // extractining uid on poll post
+                // extracting uid on poll post
                 mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
