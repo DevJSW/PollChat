@@ -61,7 +61,10 @@ public class CommentsActivity extends AppCompatActivity {
     private static int GALLERY_REQUEST =1;
     private Menu menu;
     Context context = this;
-    private Query mQueryComments;
+    private Boolean mProcessLike = false;
+    private DatabaseReference mDatabaseLike;
+    private Boolean mProcessUnlike = false;
+    private DatabaseReference mDatabaseUnlike;
     private Query mQueryChats;
 
 
@@ -93,6 +96,8 @@ public class CommentsActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
         uid_key = getIntent().getExtras().getString("poll_uid");
 
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+        mDatabaseUnlike = FirebaseDatabase.getInstance().getReference().child("Unlikes");
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Comments");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
 
@@ -105,6 +110,7 @@ public class CommentsActivity extends AppCompatActivity {
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Comments");
         mDatabaseComment.keepSynced(true);
         mDatabaseUser.keepSynced(true);
+        mDatabaseLike.keepSynced(true);
 
         mCommentField = (EditText) findViewById(R.id.commentField);
         mSendBtn = (ImageButton) findViewById(R.id.sendBtn);
@@ -221,8 +227,6 @@ public class CommentsActivity extends AppCompatActivity {
                             newPost.child("uid").setValue(mCurrentUser.getUid());
                             newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                             newPost.child("image").setValue(dataSnapshot.child("image").getValue());
-                            newPost.child("sender_uid").setValue(mCurrentUser.getUid());
-                            newPost.child("reciever_uid").setValue(reciever_uid);
                             newPost.child("date").setValue(stringDate);
                             newPost.child("post_key").setValue(mPostKey);
 
@@ -269,6 +273,109 @@ public class CommentsActivity extends AppCompatActivity {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
+
+                viewHolder.setLikeBtn(post_key);
+
+
+                mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.mLikeCount.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                viewHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessLike = true;
+
+                        mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessLike) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessLike = false;
+                                    }else {
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        // mDatabaseLike.child(post_key).child("post_key").setValue(mAuth.getCurrentUser().getUid());
+
+                                        mProcessLike = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
+
+                mDatabaseUnlike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.mUnlikeCount.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+                viewHolder.mUnlikeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessLike = true;
+
+                        mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessUnlike) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                        mDatabaseUnlike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessUnlike = false;
+                                    }else {
+
+                                        mDatabaseUnlike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        // mDatabaseLike.child(post_key).child("post_key").setValue(mAuth.getCurrentUser().getUid());
+
+                                        mProcessUnlike = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
 
 
                 mDatabasePostChats.child(post_key).addValueEventListener(new ValueEventListener() {
@@ -321,8 +428,10 @@ public class CommentsActivity extends AppCompatActivity {
 
         View mView;
 
-        ImageView mCardPhoto, mImage;
-        TextView mCommentCount;
+        ImageView mCardPhoto, mImage, mLikeBtn, mUnlikeBtn;
+        TextView mCommentCount, mLikeCount, mUnlikeCount;
+        DatabaseReference mDatabaseLike;
+        FirebaseAuth mAuth;
         LinearLayout liny;
         ProgressBar mProgressBar;
 
@@ -330,11 +439,40 @@ public class CommentsActivity extends AppCompatActivity {
             super(itemView);
             mView = itemView;
 
+            mAuth = FirebaseAuth.getInstance();
+            mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            mDatabaseLike.keepSynced(true);
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
+            mLikeBtn = (ImageView) mView.findViewById(R.id.likeBtn);
+            mUnlikeBtn = (ImageView) mView.findViewById(R.id.unlikeBtn);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
+            mLikeCount = (TextView) mView.findViewById(R.id.likeCount);
 
             mCommentCount = (TextView) mView.findViewById(R.id.commentCount);
+
+        }
+
+        public void setLikeBtn(final String post_key) {
+
+            mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                       // mCall.setImageResource(R.drawable.like_btn_red);
+                    } else {
+                        //mCall.setImageResource(R.drawable.like_btn_black);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
         }
 

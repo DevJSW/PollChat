@@ -54,7 +54,16 @@
                     android:layout_marginTop="2dp"
                     android:orientation="vertical">
 
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="18dp"
+                        android:text="date"
+                        android:textSize="12dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_gravity="right"
+                        android:id="@+id/post_date" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -64,22 +73,48 @@
                         android:layout_marginLeft="20dp"
                         android:id="@+id/post_message"
                         android:textSize="14dp"
-                        android:padding="4dp"
-                        android:paddingTop="2dp"
-                        android:layout_marginRight="5dp"
-                        android:textStyle="bold" />
+                        android:layout_marginRight="5dp" />
 
-
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="18dp"
-                        android:text="date"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginBottom="3dp"
                         android:layout_gravity="right"
-                        android:id="@+id/post_date" />
+                        android:padding="5dp"
+                        android:layout_marginRight="10dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:paddingTop="2dp"
+                            android:id="@+id/likeCount"
+                            android:text="0"/>
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginRight="35dp"
+                            android:id="@+id/likeBtn"
+                            android:src="@drawable/ic_thumb_up"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:id="@+id/unlikeCount"
+                            android:text="0"/>
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginRight="5dp"
+                            android:id="@+id/unlikeBtn"
+                            android:src="@drawable/ic_thumb_down"/>
+                    </LinearLayout>
+
+
+
 
                </LinearLayout>
 
