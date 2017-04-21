@@ -338,7 +338,7 @@ public class CommentsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        mProcessLike = true;
+                        mProcessUnlike = true;
 
                         mDatabaseLike.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -445,6 +445,7 @@ public class CommentsActivity extends AppCompatActivity {
             mUnlikeBtn = (ImageView) mView.findViewById(R.id.unlikeBtn);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             mLikeCount = (TextView) mView.findViewById(R.id.likeCount);
+            mUnlikeCount = (TextView) mView.findViewById(R.id.unlikeCount);
 
             mCommentCount = (TextView) mView.findViewById(R.id.commentCount);
 

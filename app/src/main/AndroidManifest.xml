@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/new_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -60,8 +60,11 @@
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".OpenPhotoActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            android:label=""/>
+            android:label=""
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".PostCommentActivity"
+            android:label="Post"/>
     </application>
 
 </manifest>

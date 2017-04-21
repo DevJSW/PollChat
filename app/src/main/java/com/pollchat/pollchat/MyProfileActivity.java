@@ -124,17 +124,16 @@ public class MyProfileActivity extends AppCompatActivity {
 
                         if (mProcessFollow) {
 
-                            if (dataSnapshot.child(uid_key).hasChild(mAuth.getCurrentUser().getUid())) {
+                            if (!dataSnapshot.child(uid_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
-                                mDatabaseFollowers.child(uid_key).setValue(mAuth.getCurrentUser().getUid());
-                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).setValue(uid_key);
+                                mDatabaseFollowers.child(uid_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).child(uid_key).setValue(uid_key);
                                 mFollow.setVisibility(View.GONE);
-                                mUnfollow.setVisibility(View.VISIBLE);
+
                                 mProcessFollow = false;
-
                             }
-
                         }
+
                     }
 
                     @Override
@@ -143,12 +142,16 @@ public class MyProfileActivity extends AppCompatActivity {
                     }
                 });
 
+
             }
         });
 
+        // check if user is a follower and hide follow button
+        checkUserFollower();
+
 
         mUnfollow = (Button) findViewById(R.id.unfollowBtn);
-        mFollow.setOnClickListener(new View.OnClickListener() {
+        mUnfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -163,8 +166,8 @@ public class MyProfileActivity extends AppCompatActivity {
 
                                 mDatabaseFollowers.child(uid_key).removeValue();
                                 mDatabaseFollowing.child(mAuth.getCurrentUser().getUid()).removeValue();
-                                mUnfollow.setVisibility(View.GONE);
                                 mFollow.setVisibility(View.VISIBLE);
+
                                 mProcessFollow = false;
                             }
                         }
@@ -175,6 +178,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
                     }
                 });
+
 
             }
 
@@ -194,8 +198,7 @@ public class MyProfileActivity extends AppCompatActivity {
         });
 
         // COUNT NUMBER OF PPL I'M FOLLOWING
-        mQueryFollowing = mDatabaseFollowers.child(uid_key).orderByChild(mAuth.getCurrentUser().getUid());
-        mQueryFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseFollowing.child(uid_key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -245,7 +248,32 @@ public class MyProfileActivity extends AppCompatActivity {
 
     }
 
+    // check if user is a follower and hide follow button
+    private void checkUserFollower() {
 
+        mDatabaseFollowers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(uid_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mUnfollow.setVisibility(View.VISIBLE);
+                        mFollow.setVisibility(View.GONE);
+
+                    } else {
+                        mUnfollow.setVisibility(View.GONE);
+                        mFollow.setVisibility(View.VISIBLE);
+                    }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
 
     @Override
@@ -301,7 +329,7 @@ public class MyProfileActivity extends AppCompatActivity {
                     }
                 });
 
-                // Extractining uid on poll post
+                // Extracting uid on poll post
                 mDatabasePolls.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
